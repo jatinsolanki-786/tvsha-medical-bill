@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ત્વશા મેડિકલ & સર્જીકલ સ્ટોર – બિલ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16302b; --muted:#5d716c; --line:#9db3ad; --accent:#0f6b5c; --accent-d:#0a4e43;
+  --bg:#e6eeeb; --paper:#ffffff; --danger:#a93226; --tint:#eef5f3;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:"Noto Sans Gujarati","Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:14px;line-height:1.45}
+.toolbar{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;background:var(--accent-d)}
+button{font:inherit;cursor:pointer;border:0;border-radius:6px;padding:8px 14px;background:var(--paper);color:var(--accent-d);font-weight:600}
+button:hover{background:var(--tint)}
+button:focus-visible,input:focus-visible{outline:3px solid #f2b705;outline-offset:1px}
+button.primary{background:#f2b705;color:#2b2200}
+button.primary:hover{background:#ffc72c}
+.wrap{max-width:1000px;margin:14px auto;padding:0 10px}
+.scroll{overflow-x:auto;padding-bottom:6px}
+.sheet{min-width:760px;background:var(--paper);border:2px solid var(--ink);padding:12px 14px}
+.head{text-align:center;border-bottom:2px solid var(--ink);padding-bottom:8px}
+.head .type{font-size:12px;font-weight:700;letter-spacing:.04em}
+.head h1{margin:2px 0;font-size:26px;color:var(--accent-d);line-height:1.2}
+.head .addr{font-size:13px}
+.shopmeta{display:flex;justify-content:center;flex-wrap:wrap;gap:4px 18px;margin-top:4px;font-size:12px}
+.shopmeta label{display:inline-flex;align-items:center;gap:4px}
+.shopmeta input{width:170px}
+input{font:inherit;color:inherit;background:var(--tint);border:1px solid transparent;border-bottom:1px solid var(--line);border-radius:3px;padding:3px 5px;min-width:0}
+input:hover{border-color:var(--line)}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;padding:8px 0;border-bottom:1px solid var(--ink)}
+.f{display:flex;align-items:center;gap:6px}
+.f>span{white-space:nowrap;font-weight:600;font-size:13px}
+.f input{flex:1}
+table{width:100%;border-collapse:collapse;margin-top:6px}
+th,td{border:1px solid var(--ink);padding:0;font-size:13px}
+th{background:var(--tint);padding:4px 3px;font-size:12px;text-align:center}
+td input{width:100%;background:transparent;border:0;border-radius:0;padding:4px 3px}
+td.sn{text-align:center;width:34px}
+td.amt{text-align:right;padding:4px 6px;font-weight:600;width:90px}
+td.num input{text-align:right}
+col.c-name{width:auto}
+th.act,td.act{border:0;background:none;width:34px;text-align:center}
+td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
+.addrow{margin:8px 0}
+.addrow button{background:var(--accent);color:#fff}
+.foot{display:grid;grid-template-columns:1.5fr 1fr;gap:14px;border-top:1px solid var(--ink);padding-top:8px;margin-top:6px}
+.words{font-weight:600}
+.comp{font-size:12px;margin-top:6px}
+.comp b{display:block}
+.terms{font-size:11.5px;color:var(--muted);margin-top:4px}
+.tot .row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;gap:8px}
+.tot .row input{width:110px;text-align:right}
+.tot .grand{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);margin-top:4px;font-size:17px;font-weight:700}
+.sign{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-top:10px;min-height:70px}
+.sign .remark{flex:1}
+.sign .remark .f input{flex:1}
+.sign .auth{text-align:center;font-size:13px}
+.sign .auth .line{margin-top:34px;border-top:1px solid var(--ink);padding-top:2px;font-weight:600}
+.history{margin:20px 0 40px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.history h2{margin:0 0 8px;font-size:17px}
+.history ul{list-style:none;margin:0;padding:0}
+.history li{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:8px 0;border-top:1px solid var(--tint)}
+.history li .t{flex:1;min-width:180px}
+.history li .t small{color:var(--muted);display:block}
+.history li button{padding:5px 11px;background:var(--tint)}
+.history li button.d{color:var(--danger)}
+.empty{color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}
+.toast.on{opacity:1}
+@media (max-width:640px){.info,.foot{grid-template-columns:1fr}}
+@page{size:A5 landscape;margin:6mm}
+@media print{
+  body{background:#fff;font-size:11px}
+  .toolbar,.history,.addrow,.act,.toast{display:none!important}
+  .wrap{max-width:none;margin:0;padding:0}
+  .scroll{overflow:visible}
+  .sheet{min-width:0;border-width:1.5px;padding:6px 8px}
+  .head h1{font-size:20px}
+  input{background:transparent!important;border:0!important;padding:1px 2px}
+  input::-webkit-calendar-picker-indicator{display:none}
+  th,td{font-size:11px}
+  .sign{min-height:50px}
+  tr{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button class="primary" id="btnSave">બિલ સેવ કરો</button>
+  <button id="btnNew">નવું બિલ</button>
+  <button id="btnPrint">Print / Save as PDF</button>
+</div>
+
+<div class="wrap">
+  <div class="scroll">
+  <div class="sheet" id="sheet">
+    <div class="head">
+      <div class="type">BILL OF SUPPLY / CASH MEMO</div>
+      <h1>ત્વશા મેડિકલ &amp; સર્જીકલ સ્ટોર</h1>
+      <div class="addr">સરા રોડ, રૂદ્ર ગેઈટ નં. ૧, હળવદ &nbsp;|&nbsp; મોબાઈલ: ૯૨૭૪૩ ૦૫૩૫૩</div>
+      <div class="shopmeta">
+        <label>E-Mail: <input id="email" placeholder="email@example.com"></label>
+        <label>GSTIN: <input id="gstin" placeholder="GSTIN"></label>
+        <label>D.L.No.: <input id="dl" placeholder="ડ્રગ લાયસન્સ નંબર"></label>
+      </div>
+    </div>
+
+    <div class="info">
+      <label class="f"><span>Invoice No.</span><input id="invNo"></label>
+      <label class="f"><span>Date</span><input id="date" type="date"></label>
+      <label class="f"><span>Patient Name</span><input id="pName"></label>
+      <label class="f"><span>Dr. Name</span><input id="drName"></label>
+      <label class="f"><span>Patient Address</span><input id="pAddr"></label>
+      <label class="f"><span>Dr Reg No.</span><input id="drReg"></label>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>SN.</th><th>PRODUCT NAME</th><th>PACK</th><th>BATCH</th><th>EXP.</th>
+          <th>MRP</th><th>QTY</th><th>RATE</th><th>AMOUNT</th><th class="act"></th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <div class="addrow"><button id="btnAdd">+ Add Row</button></div>
+
+    <div class="foot">
+      <div>
+        <div class="words" id="words"></div>
+        <div class="comp">
+          <b>COMPOSITION TAXPAYERS</b>
+          Composition taxable person, not eligible to collect tax on supplies.
+        </div>
+        <div class="terms">Terms &amp; Conditions: વેચાયેલો માલ પરત લેવાશે નહીં. (Goods once sold will not be taken back.) E. &amp; O.E.</div>
+      </div>
+      <div class="tot">
+        <div class="row"><span>D.AMOUNT</span><input id="disc" inputmode="decimal" placeholder="0.00"></div>
+        <div class="row grand"><span>GRAND TOTAL</span><span id="grand">0.00</span></div>
+      </div>
+    </div>
+
+    <div class="sign">
+      <div class="remark"><label class="f"><span>Remark</span><input id="remark"></label></div>
+      <div class="auth">
+        For ત્વશા મેડિકલ &amp; સર્જીકલ સ્ટોર
+        <div class="line">Authorised Signatory</div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <section class="history">
+    <h2>સેવ કરેલા બિલ</h2>
+    <ul id="histList"></ul>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var K_DRAFT='tvasha_draft', K_BILLS='tvasha_bills', K_SHOP='tvasha_shop', K_CNT='tvasha_counter';
+  var $=function(id){return document.getElementById(id)};
+  var FIELDS=['name','pack','batch','exp','mrp','qty','rate'];
+  var NUMERIC={mrp:1,qty:1,rate:1};
+
+  function load(k,def){try{var v=localStorage.getItem(k);return v?JSON.parse(v):def}catch(e){return def}}
+  function store(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
+
+  function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(function(){t.classList.remove('on')},1800)}
+  function today(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+  function fmtDate(s){if(!s)return '';var p=s.split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:s}
+  function num(v){var n=parseFloat(String(v).replace(/,/g,''));return isNaN(n)?0:n}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+  /* ---------- Invoice number ---------- */
+  function nextInvNo(){
+    var c=load(K_CNT,17513);
+    (load(K_BILLS,[])).forEach(function(b){var m=/^A(\d+)$/.exec(b.invNo||'');if(m&&+m[1]>c)c=+m[1]});
+    c=c+1; store(K_CNT,c);
+    return 'A'+String(c).padStart(6,'0');
+  }
+  function bumpCounter(inv){var m=/^A(\d+)$/.exec(inv||'');if(m&&+m[1]>load(K_CNT,0))store(K_CNT,+m[1])}
+
+  /* ---------- Amount in words (Indian system) ---------- */
+  var A=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
+  var T=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+  function two(n){return n<20?A[n]:T[Math.floor(n/10)]+(n%10?' '+A[n%10]:'')}
+  function three(n){var h=Math.floor(n/100),r=n%100,s='';if(h)s=A[h]+' Hundred';if(r)s+=(h?' and ':'')+two(r);return s}
+  function intWords(n){
+    if(n===0)return 'Zero';
+    var p=[],cr=Math.floor(n/1e7),la=Math.floor(n%1e7/1e5),th=Math.floor(n%1e5/1e3),re=n%1000;
+    if(cr)p.push(two(cr)+' Crore');
+    if(la)p.push(two(la)+' Lakh');
+    if(th)p.push(two(th)+' Thousand');
+    if(re)p.push((p.length&&re<100?'and ':'')+three(re));
+    return p.join(' ');
+  }
+  function amountWords(x){
+    var c=Math.round(x*100),r=Math.floor(c/100),p=c%100;
+    return 'Rs. '+intWords(r)+(p?' and '+two(p)+' Paise':'')+' only';
+  }
+
+  /* ---------- Rows ---------- */
+  function addRow(d){
+    d=d||{};
+    var tr=document.createElement('tr');
+    var h='<td class="sn"></td>';
+    FIELDS.forEach(function(f){
+      h+='<td'+(NUMERIC[f]?' class="num"':'')+'><input data-f="'+f+'"'+(NUMERIC[f]?' inputmode="decimal"':'')+' value="'+esc(d[f]||'')+'"></td>';
+    });
+    h+='<td class="amt"></td><td class="act"><button class="del" title="Delete row" aria-label="Delete row">✕</button></td>';
+    tr.innerHTML=h;
+    $('rows').appendChild(tr);
+  }
+  function recalc(){
+    var total=0;
+    Array.prototype.forEach.call($('rows').children,function(tr,i){
+      tr.children[0].textContent=i+1;
+      var q=num(tr.querySelector('[data-f=qty]').value),r=num(tr.querySelector('[data-f=rate]').value);
+      var a=Math.round(q*r*100)/100;
+      tr.querySelector('.amt').textContent=a?a.toFixed(2):'';
+      total+=a;
+    });
+    var g=Math.max(0,Math.round((total-num($('disc').value))*100)/100);
+    $('grand').textContent=g.toFixed(2);
+    $('words').textContent=amountWords(g);
+  }
+
+  /* ---------- Bill <-> DOM ---------- */
+  function getBill(){
+    var items=[];
+    Array.prototype.forEach.call($('rows').children,function(tr){
+      var o={};FIELDS.forEach(function(f){o[f]=tr.querySelector('[data-f='+f+']').value});items.push(o);
+    });
+    return {invNo:$('invNo').value,date:$('date').value,pName:$('pName').value,pAddr:$('pAddr').value,
+      drName:$('drName').value,drReg:$('drReg').value,disc:$('disc').value,remark:$('remark').value,
+      items:items,total:$('grand').textContent};
+  }
+  function setBill(b){
+    $('invNo').value=b.invNo||'';$('date').value=b.date||today();
+    $('pName').value=b.pName||'';$('pAddr').value=b.pAddr||'';
+    $('drName').value=b.drName||'';$('drReg').value=b.drReg||'';
+    $('disc').value=b.disc||'';$('remark').value=b.remark||'';
+    $('rows').innerHTML='';
+    (b.items&&b.items.length?b.items:[{}]).forEach(addRow);
+    recalc();
+  }
+  function getShop(){return {email:$('email').value,gstin:$('gstin').value,dl:$('dl').value}}
+  function persist(){store(K_DRAFT,getBill());store(K_SHOP,getShop())}
+
+  /* ---------- History ---------- */
+  function renderHistory(){
+    var list=load(K_BILLS,[]),ul=$('histList');
+    if(!list.length){ul.innerHTML='<li class="empty">હજી કોઈ બિલ સેવ નથી. બિલ બનાવીને "બિલ સેવ કરો" દબાવો.</li>';return}
+    ul.innerHTML=list.map(function(b,i){
+      return '<li><div class="t"><b>'+esc(b.invNo||'—')+'</b> · '+esc(b.pName||'નામ નથી')+
+        '<small>'+esc(fmtDate(b.date))+' · Rs. '+esc(b.total||'0.00')+'</small></div>'+
+        '<button data-open="'+i+'">ખોલો</button><button class="d" data-del="'+i+'">કાઢી નાખો</button></li>';
+    }).join('');
+  }
+  function saveBill(){
+    var b=getBill();
+    if(!b.invNo){toast('પહેલા Invoice No. લખો');$('invNo').focus();return}
+    var list=load(K_BILLS,[]),idx=-1;
+    list.forEach(function(x,i){if(x.invNo===b.invNo)idx=i});
+    b.savedAt=Date.now();
+    if(idx>=0)list.splice(idx,1);
+    list.unshift(b);
+    if(!store(K_BILLS,list)){toast('સેવ ન થયું – બ્રાઉઝર સ્ટોરેજ ભરેલું છે');return}
+    bumpCounter(b.invNo);renderHistory();toast('બિલ સેવ થયું');
+  }
+  function newBill(){
+    var b=getBill();
+    var hasData=b.pName||b.items.some(function(r){return r.name||r.qty});
+    if(hasData&&!confirm('નવું બિલ શરૂ કરવું? સેવ ન કરેલો ફેરફાર જતો રહેશે.'))return;
+    setBill({invNo:nextInvNo(),date:today()});persist();
+  }
+
+  /* ---------- Events ---------- */
+  $('btnAdd').onclick=function(){addRow();recalc();persist()};
+  $('btnSave').onclick=saveBill;
+  $('btnNew').onclick=newBill;
+  $('btnPrint').onclick=function(){persist();window.print()};
+  $('rows').addEventListener('click',function(e){
+    if(!e.target.classList.contains('del'))return;
+    var tr=e.target.closest('tr');
+    if($('rows').children.length===1){setBill(Object.assign(getBill(),{items:[{}]}));}
+    else tr.remove();
+    recalc();persist();
+  });
+  document.addEventListener('input',function(){recalc();persist()});
+  $('histList').addEventListener('click',function(e){
+    var list=load(K_BILLS,[]),o=e.target.getAttribute('data-open'),d=e.target.getAttribute('data-del');
+    if(o!==null){setBill(list[+o]);persist();window.scrollTo({top:0,behavior:'smooth'});toast('બિલ ખુલ્યું')}
+    if(d!==null&&confirm('આ બિલ કાઢી નાખવું?')){list.splice(+d,1);store(K_BILLS,list);renderHistory()}
+  });
+
+  /* ---------- Init ---------- */
+  var shop=load(K_SHOP,{});
+  $('email').value=shop.email||'';$('gstin').value=shop.gstin||'';$('dl').value=shop.dl||'';
+  var draft=load(K_DRAFT,null);
+  if(draft){setBill(draft)}else{setBill({invNo:nextInvNo(),date:today()});persist()}
+  renderHistory();
+})();
+</script>
+</body>
+  </html>
