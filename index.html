@@ -3,88 +3,136 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ત્વશા મેડિકલ & સર્જીકલ સ્ટોર – બિલ</title>
+<title>ત્વિશા મેડિકલ & સર્જીકલ સ્ટોર</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#16302b; --muted:#5d716c; --line:#9db3ad; --accent:#0f6b5c; --accent-d:#0a4e43;
-  --bg:#e6eeeb; --paper:#ffffff; --danger:#a93226; --tint:#eef5f3;
+  --ink:#0f1f2e; --muted:#64748b; --line:#d5dde3; --brand:#0f766e; --brand-d:#064e46;
+  --bg:#f1f5f7; --paper:#fff; --danger:#b42318; --tint:#eef5f3; --gold:#f5b50a;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
-body{font-family:"Noto Sans Gujarati","Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:14px;line-height:1.45}
-.toolbar{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;background:var(--accent-d)}
-button{font:inherit;cursor:pointer;border:0;border-radius:6px;padding:8px 14px;background:var(--paper);color:var(--accent-d);font-weight:600}
-button:hover{background:var(--tint)}
-button:focus-visible,input:focus-visible{outline:3px solid #f2b705;outline-offset:1px}
-button.primary{background:#f2b705;color:#2b2200}
-button.primary:hover{background:#ffc72c}
-.wrap{max-width:1000px;margin:14px auto;padding:0 10px}
+[hidden]{display:none!important}
+body{font-family:"Plus Jakarta Sans","Noto Sans Gujarati","Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:14px;line-height:1.5}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:9px 16px;font-weight:700;background:#e4ecef;color:var(--ink);transition:background .15s}
+button:hover{background:#d6e1e5}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
+.pri{background:var(--brand);color:#fff}.pri:hover{background:var(--brand-d)}
+.gold{background:var(--gold);color:#2b2200}.gold:hover{background:#ffc82e}
+.dng{background:#fde8e6;color:var(--danger)}.dng:hover{background:#fbd5d1}
+input{font:inherit;color:inherit;min-width:0}
+
+/* ---------- Login ---------- */
+#login{min-height:100vh;display:grid;place-items:center;padding:18px;background:radial-gradient(900px 500px at 10% 0,#c9e7e1 0,transparent 60%),radial-gradient(700px 500px at 100% 100%,#f9e9b8 0,transparent 55%),var(--bg)}
+.lcard{display:grid;grid-template-columns:1.05fr 1fr;width:100%;max-width:880px;border-radius:26px;overflow:hidden;background:#fff;box-shadow:0 40px 90px -30px rgba(6,78,70,.45)}
+.lbrand{background:linear-gradient(155deg,#0f766e,#053f39);color:#fff;padding:38px;display:flex;flex-direction:column;justify-content:space-between;gap:40px}
+.cross{width:56px;height:56px;border-radius:17px;background:rgba(255,255,255,.14);position:relative}
+.cross::before,.cross::after{content:"";position:absolute;background:#fff;border-radius:3px;left:50%;top:50%;transform:translate(-50%,-50%)}
+.cross::before{width:26px;height:8px}.cross::after{width:8px;height:26px}
+.lbrand h1{margin:0;font-size:30px;line-height:1.25}
+.lbrand p{margin:8px 0 0;opacity:.8;font-size:13px}
+.lform{padding:38px 34px;display:flex;flex-direction:column;justify-content:center;gap:14px}
+.lform h2{margin:0;font-size:22px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:#e9eff2;border-radius:13px;padding:4px;gap:4px}
+.seg button{background:transparent;border-radius:10px;color:var(--muted)}
+.seg button.on{background:#fff;color:var(--brand-d);box-shadow:0 2px 8px rgba(15,31,46,.12)}
+.lform label{font-weight:700;font-size:13px;color:var(--muted)}
+.pw{display:flex;gap:6px;margin-top:5px}
+.fld{width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:12px;background:#fff}
+.fld:focus{border-color:var(--brand)}
+.err{color:var(--danger);font-size:13px;min-height:18px;margin:0}
+.lform .go{padding:12px;font-size:15px}
+
+/* ---------- App shell ---------- */
+.topbar{position:sticky;top:0;z-index:6;display:flex;align-items:center;flex-wrap:wrap;gap:8px 14px;padding:10px 16px;background:linear-gradient(90deg,#064e46,#0f766e);color:#fff}
+.topbar .brand{font-weight:800;font-size:16px;margin-right:auto}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tabs button{background:transparent;color:#d4efe9;padding:7px 13px}
+.tabs button:hover{background:rgba(255,255,255,.12)}
+.tabs button.on{background:rgba(255,255,255,.2);color:#fff}
+.pill{background:var(--gold);color:#2b2200;border-radius:99px;padding:3px 12px;font-weight:800;font-size:12px}
+.topbar .out{background:rgba(255,255,255,.14);color:#fff;padding:7px 13px}
+body[data-role=user] .admin-only{display:none!important}
+.view{max-width:1000px;margin:16px auto;padding:0 12px}
+.card{background:#fff;border-radius:18px;padding:18px;box-shadow:0 1px 2px rgba(15,31,46,.06),0 8px 24px -12px rgba(15,31,46,.15);margin-bottom:16px}
+.card h2{margin:0 0 12px;font-size:17px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.grid label{display:block;font-size:12px;font-weight:700;color:var(--muted)}
+.grid label .fld{margin-top:4px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.billbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.mtable{width:100%;border-collapse:collapse;font-size:13px}
+.mtable th{text-align:left;color:var(--muted);font-size:12px;padding:8px;border-bottom:2px solid var(--line)}
+.mtable td{padding:8px;border-bottom:1px solid #edf1f3}
+.mtable td.r,.mtable th.r{text-align:right}
+.mtable td button{padding:4px 10px;font-size:12px}
+.hint{color:var(--muted);font-size:12px;margin:6px 0 0}
+.chk{display:flex;gap:10px;align-items:center;font-weight:600;margin-top:12px}
+.chk input{width:18px;height:18px}
+
+/* ---------- Bill sheet ---------- */
 .scroll{overflow-x:auto;padding-bottom:6px}
-.sheet{min-width:760px;background:var(--paper);border:2px solid var(--ink);padding:12px 14px}
+.sheet{min-width:760px;background:var(--paper);border:2px solid var(--ink);padding:12px 14px;border-radius:4px}
 .head{text-align:center;border-bottom:2px solid var(--ink);padding-bottom:8px}
 .head .type{font-size:12px;font-weight:700;letter-spacing:.04em}
-.head h1{margin:2px 0;font-size:26px;color:var(--accent-d);line-height:1.2}
+.head h1{margin:2px 0;font-size:26px;color:var(--brand-d);line-height:1.2}
 .head .addr{font-size:13px}
 .shopmeta{display:flex;justify-content:center;flex-wrap:wrap;gap:4px 18px;margin-top:4px;font-size:12px}
 .shopmeta label{display:inline-flex;align-items:center;gap:4px}
 .shopmeta input{width:170px}
-input{font:inherit;color:inherit;background:var(--tint);border:1px solid transparent;border-bottom:1px solid var(--line);border-radius:3px;padding:3px 5px;min-width:0}
-input:hover{border-color:var(--line)}
+.sheet input{background:var(--tint);border:1px solid transparent;border-bottom:1px solid #9db3ad;border-radius:3px;padding:3px 5px}
+.sheet input:hover{border-color:#9db3ad}
+.sheet input[readonly]{background:#f3f4f6;color:#374151}
 .info{display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;padding:8px 0;border-bottom:1px solid var(--ink)}
 .f{display:flex;align-items:center;gap:6px}
 .f>span{white-space:nowrap;font-weight:600;font-size:13px}
 .f input{flex:1}
-table{width:100%;border-collapse:collapse;margin-top:6px}
-th,td{border:1px solid var(--ink);padding:0;font-size:13px}
-th{background:var(--tint);padding:4px 3px;font-size:12px;text-align:center}
-td input{width:100%;background:transparent;border:0;border-radius:0;padding:4px 3px}
-td.sn{text-align:center;width:34px}
-td.amt{text-align:right;padding:4px 6px;font-weight:600;width:90px}
-td.num input{text-align:right}
-col.c-name{width:auto}
-th.act,td.act{border:0;background:none;width:34px;text-align:center}
+.sheet table{width:100%;border-collapse:collapse;margin-top:6px}
+.sheet th,.sheet td{border:1px solid var(--ink);padding:0;font-size:13px}
+.sheet th{background:var(--tint);padding:4px 3px;font-size:12px;text-align:center}
+.sheet td input{width:100%;background:transparent;border:0;border-radius:0;padding:4px 3px}
+.sheet td.sn{text-align:center;width:34px}
+.sheet td.amt{text-align:right;padding:4px 6px;font-weight:600;width:90px}
+.sheet td.num input{text-align:right}
+.sheet th.act,.sheet td.act{border:0;background:none;width:34px;text-align:center}
 td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
 .addrow{margin:8px 0}
-.addrow button{background:var(--accent);color:#fff}
+.addrow button{background:var(--brand);color:#fff}
 .foot{display:grid;grid-template-columns:1.5fr 1fr;gap:14px;border-top:1px solid var(--ink);padding-top:8px;margin-top:6px}
 .words{font-weight:600}
-.comp{font-size:12px;margin-top:6px}
-.comp b{display:block}
+.comp{font-size:12px;margin-top:6px}.comp b{display:block}
 .terms{font-size:11.5px;color:var(--muted);margin-top:4px}
 .tot .row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;gap:8px}
 .tot .row input{width:110px;text-align:right}
 .tot .grand{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);margin-top:4px;font-size:17px;font-weight:700}
 .sign{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-top:10px;min-height:70px}
 .sign .remark{flex:1}
-.sign .remark .f input{flex:1}
 .sign .auth{text-align:center;font-size:13px}
-.sign .auth .line{margin-top:34px;border-top:1px solid var(--ink);padding-top:2px;font-weight:600}
-.history{margin:20px 0 40px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
-.history h2{margin:0 0 8px;font-size:17px}
+.sign .auth .sig{display:block;height:46px;max-width:100%;margin:6px auto 0}
+.sign .auth .line{margin-top:2px;border-top:1px solid var(--ink);padding-top:2px;font-weight:600}
 .history ul{list-style:none;margin:0;padding:0}
-.history li{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:8px 0;border-top:1px solid var(--tint)}
+.history li{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:9px 0;border-top:1px solid #edf1f3}
 .history li .t{flex:1;min-width:180px}
 .history li .t small{color:var(--muted);display:block}
-.history li button{padding:5px 11px;background:var(--tint)}
-.history li button.d{color:var(--danger)}
+.history li button{padding:5px 12px}
 .empty{color:var(--muted)}
-.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20}
 .toast.on{opacity:1}
-@media (max-width:640px){.info,.foot{grid-template-columns:1fr}}
+@media (max-width:700px){.lcard{grid-template-columns:1fr}.lbrand{padding:26px;gap:20px}.lform{padding:26px 22px}.info,.foot{grid-template-columns:1fr}}
+
 @page{size:A5 landscape;margin:6mm}
 @media print{
   body{background:#fff;font-size:11px}
-  .toolbar,.history,.addrow,.act,.toast{display:none!important}
-  .wrap{max-width:none;margin:0;padding:0}
+  #login,.topbar,.billbar,.history,.addrow,.act,.toast,.view:not(#view-bill){display:none!important}
+  .view{max-width:none;margin:0;padding:0}
   .scroll{overflow:visible}
   .sheet{min-width:0;border-width:1.5px;padding:6px 8px}
   .head h1{font-size:20px}
-  input{background:transparent!important;border:0!important;padding:1px 2px}
+  .sheet input{background:transparent!important;border:0!important;padding:1px 2px}
   input::-webkit-calendar-picker-indicator{display:none}
-  th,td{font-size:11px}
+  .sheet th,.sheet td{font-size:11px}
   .sign{min-height:50px}
   tr{break-inside:avoid}
 }
@@ -92,104 +140,297 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
 </head>
 <body>
 
-<div class="toolbar">
-  <button class="primary" id="btnSave">બિલ સેવ કરો</button>
-  <button id="btnNew">નવું બિલ</button>
-  <button id="btnPrint">Print / Save as PDF</button>
+<!-- ================= LOGIN ================= -->
+<div id="login">
+  <div class="lcard">
+    <div class="lbrand">
+      <div class="cross"></div>
+      <div>
+        <h1>ત્વિશા મેડિકલ &amp; સર્જીકલ સ્ટોર</h1>
+        <p>સરા રોડ, રૂદ્ર ગેઈટ નં. ૧, હળવદ</p>
+      </div>
+    </div>
+    <form class="lform" id="lform" autocomplete="off">
+      <h2>લોગીન કરો</h2>
+      <div class="seg" id="seg">
+        <button type="button" class="on" data-role="admin">Admin</button>
+        <button type="button" data-role="user">User</button>
+      </div>
+      <div>
+        <label for="lpw" id="lpwLabel">Admin પાસવર્ડ</label>
+        <div class="pw">
+          <input class="fld" id="lpw" type="password" autocomplete="current-password">
+          <button type="button" id="eye">બતાવો</button>
+        </div>
+      </div>
+      <p class="err" id="lerr"></p>
+      <button class="pri go" type="submit">લોગીન</button>
+    </form>
+  </div>
 </div>
 
-<div class="wrap">
-  <div class="scroll">
-  <div class="sheet" id="sheet">
-    <div class="head">
-      <div class="type">BILL OF SUPPLY / CASH MEMO</div>
-      <h1> ત્વિશા મેડિકલ &amp; સર્જીકલ સ્ટોર</h1>
-      <div class="addr">સરા રોડ, રૂદ્ર ગેઈટ નં. ૧, હળવદ &nbsp;|&nbsp; મોબાઈલ: ૯૨૭૪૩ ૦૫૩૫૩</div>
-      <div class="shopmeta">
-        <label>E-Mail: <input id="email" placeholder="email@example.com"></label>
-        <label>GSTIN: <input id="gstin" placeholder="GSTIN"></label>
-        <label>D.L.No.: <input id="dl" placeholder="ડ્રગ લાયસન્સ નંબર"></label>
+<!-- ================= APP ================= -->
+<div id="app" hidden>
+  <header class="topbar">
+    <span class="brand">ત્વિશા મેડિકલ</span>
+    <nav class="tabs" id="tabs">
+      <button data-tab="bill" class="on">બિલ</button>
+      <button data-tab="meds" class="admin-only">દવા &amp; રેટ</button>
+      <button data-tab="set" class="admin-only">સેટિંગ</button>
+    </nav>
+    <span class="pill" id="rolePill"></span>
+    <button class="out" id="btnOut">લોગઆઉટ</button>
+  </header>
+
+  <!-- ---- Bill ---- -->
+  <section class="view" id="view-bill">
+    <div class="billbar">
+      <button class="gold" id="btnSave">બિલ સેવ કરો</button>
+      <button id="btnNew">નવું બિલ</button>
+      <button id="btnPrint">Print / Save as PDF</button>
+    </div>
+    <div class="scroll">
+    <div class="sheet" id="sheet">
+      <div class="head">
+        <div class="type">BILL OF SUPPLY / CASH MEMO</div>
+        <h1>ત્વિશા મેડિકલ &amp; સર્જીકલ સ્ટોર</h1>
+        <div class="addr">સરા રોડ, રૂદ્ર ગેઈટ નં. ૧, હળવદ &nbsp;|&nbsp; મોબાઈલ: ૯૨૭૪૩ ૦૫૩૫૩</div>
+        <div class="shopmeta">
+          <label>E-Mail: <input id="email" placeholder="email@example.com"></label>
+          <label>GSTIN: <input id="gstin" placeholder="GSTIN"></label>
+          <label>D.L.No.: <input id="dl" placeholder="ડ્રગ લાયસન્સ નંબર"></label>
+        </div>
       </div>
-    </div>
-
-    <div class="info">
-      <label class="f"><span>Invoice No.</span><input id="invNo"></label>
-      <label class="f"><span>Date</span><input id="date" type="date"></label>
-      <label class="f"><span>Patient Name</span><input id="pName"></label>
-      <label class="f"><span>Dr. Name</span><input id="drName"></label>
-      <label class="f"><span>Patient Address</span><input id="pAddr"></label>
-      <label class="f"><span>Dr Reg No.</span><input id="drReg"></label>
-    </div>
-
-    <table>
-      <thead>
-        <tr>
+      <div class="info">
+        <label class="f"><span>Invoice No.</span><input id="invNo"></label>
+        <label class="f"><span>Date</span><input id="date" type="date"></label>
+        <label class="f"><span>Patient Name</span><input id="pName"></label>
+        <label class="f"><span>Dr. Name</span><input id="drName"></label>
+        <label class="f"><span>Patient Address</span><input id="pAddr"></label>
+        <label class="f"><span>Dr Reg No.</span><input id="drReg"></label>
+      </div>
+      <table>
+        <thead><tr>
           <th>SN.</th><th>PRODUCT NAME</th><th>PACK</th><th>BATCH</th><th>EXP.</th>
           <th>MRP</th><th>QTY</th><th>RATE</th><th>AMOUNT</th><th class="act"></th>
-        </tr>
-      </thead>
-      <tbody id="rows"></tbody>
-    </table>
-    <div class="addrow"><button id="btnAdd">+ Add Row</button></div>
-
-    <div class="foot">
-      <div>
-        <div class="words" id="words"></div>
-        <div class="comp">
-          <b>COMPOSITION TAXPAYERS</b>
-          Composition taxable person, not eligible to collect tax on supplies.
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <div class="addrow"><button id="btnAdd">+ Add Row</button></div>
+      <div class="foot">
+        <div>
+          <div class="words" id="words"></div>
+          <div class="comp"><b>COMPOSITION TAXPAYERS</b>Composition taxable person, not eligible to collect tax on supplies.</div>
+          <div class="terms">Terms &amp; Conditions: વેચાયેલો માલ પરત લેવાશે નહીં. (Goods once sold will not be taken back.) E. &amp; O.E.</div>
         </div>
-        <div class="terms">Terms &amp; Conditions: વેચાયેલો માલ પરત લેવાશે નહીં. (Goods once sold will not be taken back.) E. &amp; O.E.</div>
+        <div class="tot">
+          <div class="row"><span>D.AMOUNT</span><input id="disc" inputmode="decimal" placeholder="0.00"></div>
+          <div class="row grand"><span>GRAND TOTAL</span><span id="grand">0.00</span></div>
+        </div>
       </div>
-      <div class="tot">
-        <div class="row"><span>D.AMOUNT</span><input id="disc" inputmode="decimal" placeholder="0.00"></div>
-        <div class="row grand"><span>GRAND TOTAL</span><span id="grand">0.00</span></div>
+      <div class="sign">
+        <div class="remark"><label class="f"><span>Remark</span><input id="remark"></label></div>
+        <div class="auth">
+          For ત્વિશા મેડિકલ &amp; સર્જીકલ સ્ટોર
+          <img class="sig" alt="Signature" src="data:image/png;base64,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..." >
+          <div class="line">Authorised Signatory</div>
+        </div>
       </div>
     </div>
+    </div>
+    <datalist id="medList"></datalist>
+    <section class="card history" style="margin-top:18px">
+      <h2>સેવ કરેલા બિલ</h2>
+      <ul id="histList"></ul>
+    </section>
+  </section>
 
-    <div class="sign">
-      <div class="remark"><label class="f"><span>Remark</span><input id="remark"></label></div>
-      <div class="auth">
-        For ત્વશા મેડિકલ &amp; સર્જીકલ સ્ટોર
-        <div class="line">Authorised Signatory</div>
+  <!-- ---- Medicines (admin) ---- -->
+  <section class="view" id="view-meds" hidden>
+    <div class="card">
+      <h2 id="mTitle">નવી દવા ઉમેરો</h2>
+      <input type="hidden" id="m_id">
+      <div class="grid">
+        <label>દવાનું નામ<input class="fld" id="m_name"></label>
+        <label>પેક (1*10)<input class="fld" id="m_pack"></label>
+        <label>બેચ<input class="fld" id="m_batch"></label>
+        <label>એક્સપાયરી (7/31)<input class="fld" id="m_exp"></label>
+        <label>MRP<input class="fld" id="m_mrp" inputmode="decimal"></label>
+        <label>રેટ (કિંમત)<input class="fld" id="m_rate" inputmode="decimal"></label>
+      </div>
+      <div class="actions">
+        <button class="pri" id="mSave">સેવ કરો</button>
+        <button id="mClear">ખાલી કરો</button>
       </div>
     </div>
-  </div>
-  </div>
+    <div class="card">
+      <h2>દવાની યાદી <span id="mCount" class="hint"></span></h2>
+      <input class="fld" id="m_search" placeholder="દવા શોધો…" style="margin-bottom:10px">
+      <div class="scroll">
+        <table class="mtable">
+          <thead><tr><th>દવા</th><th>પેક</th><th class="r">MRP</th><th class="r">રેટ</th><th></th></tr></thead>
+          <tbody id="mList"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
 
-  <section class="history">
-    <h2>સેવ કરેલા બિલ</h2>
-    <ul id="histList"></ul>
+  <!-- ---- Settings (admin) ---- -->
+  <section class="view" id="view-set" hidden>
+    <div class="card">
+      <h2>પાસવર્ડ બદલો</h2>
+      <div class="grid">
+        <label>નવો Admin પાસવર્ડ<input class="fld" id="s_admin" type="password" autocomplete="new-password"></label>
+        <label>નવો User પાસવર્ડ<input class="fld" id="s_user" type="password" autocomplete="new-password"></label>
+      </div>
+      <p class="hint">ઓછામાં ઓછા ૪ અક્ષર. જે ખાલી રાખશો તે બદલાશે નહીં.</p>
+      <label class="chk"><input type="checkbox" id="s_edit"> User બિલમાં MRP / રેટ બદલી શકે</label>
+      <div class="actions"><button class="pri" id="sSave">સેટિંગ સેવ કરો</button></div>
+    </div>
+    <div class="card">
+      <h2>બેકઅપ</h2>
+      <p class="hint" style="margin:0 0 10px">દવાની યાદી અને બિલ ફક્ત આ બ્રાઉઝરમાં સચવાય છે. બીજા ફોન/કમ્પ્યુટર પર લઈ જવા માટે Export કરી ત્યાં Import કરો.</p>
+      <div class="actions" style="margin-top:0">
+        <button id="bExp">Export (ફાઈલ ડાઉનલોડ)</button>
+        <button id="bImp">Import (ફાઈલમાંથી)</button>
+        <input type="file" id="bFile" accept="application/json,.json" hidden>
+      </div>
+    </div>
   </section>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
 (function(){
-  var K_DRAFT='tvasha_draft', K_BILLS='tvasha_bills', K_SHOP='tvasha_shop', K_CNT='tvasha_counter';
+  var K_DRAFT='tvasha_draft',K_BILLS='tvasha_bills',K_SHOP='tvasha_shop',K_CNT='tvasha_counter',K_MEDS='tvasha_meds',K_AUTH='tvasha_auth';
   var $=function(id){return document.getElementById(id)};
-  var FIELDS=['name','pack','batch','exp','mrp','qty','rate'];
-  var NUMERIC={mrp:1,qty:1,rate:1};
+  var FIELDS=['name','pack','batch','exp','mrp','qty','rate'],NUMERIC={mrp:1,qty:1,rate:1};
+  var role=null,auth=null,loginRole='admin';
 
-  function load(k,def){try{var v=localStorage.getItem(k);return v?JSON.parse(v):def}catch(e){return def}}
+  function load(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
   function store(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
-
-  function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(function(){t.classList.remove('on')},1800)}
+  function sess(v){try{if(v===undefined)return sessionStorage.getItem('tvasha_role');v?sessionStorage.setItem('tvasha_role',v):sessionStorage.removeItem('tvasha_role')}catch(e){return null}}
+  function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(function(){t.classList.remove('on')},1900)}
   function today(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
   function fmtDate(s){if(!s)return '';var p=s.split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:s}
   function num(v){var n=parseFloat(String(v).replace(/,/g,''));return isNaN(n)?0:n}
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function hash(s){
+    try{return crypto.subtle.digest('SHA-256',new TextEncoder().encode('tvasha|'+s)).then(function(b){
+      return Array.prototype.map.call(new Uint8Array(b),function(x){return x.toString(16).padStart(2,'0')}).join('')})}
+    catch(e){return Promise.resolve('p:'+s)}
+  }
 
-  /* ---------- Invoice number ---------- */
+  /* ================= Login ================= */
+  document.querySelectorAll('#seg button').forEach(function(b){
+    b.onclick=function(){
+      loginRole=b.dataset.role;
+      document.querySelectorAll('#seg button').forEach(function(x){x.classList.toggle('on',x===b)});
+      $('lpwLabel').textContent=(loginRole==='admin'?'Admin':'User')+' પાસવર્ડ';
+      $('lerr').textContent='';$('lpw').focus();
+    };
+  });
+  $('eye').onclick=function(){var p=$('lpw');var s=p.type==='password';p.type=s?'text':'password';this.textContent=s?'છુપાવો':'બતાવો'};
+  $('lform').onsubmit=function(e){
+    e.preventDefault();
+    hash($('lpw').value).then(function(h){
+      if(h===auth[loginRole]){$('lpw').value='';$('lerr').textContent='';sess(loginRole);enter(loginRole)}
+      else{$('lerr').textContent='પાસવર્ડ ખોટો છે. ફરી પ્રયત્ન કરો.'}
+    });
+  };
+  function enter(r){
+    role=r;
+    document.body.dataset.role=r;
+    $('login').hidden=true;$('app').hidden=false;
+    $('rolePill').textContent=r==='admin'?'Admin':'User';
+    refreshMeds();renderHistory();applyLock();showTab('bill');
+  }
+  $('btnOut').onclick=function(){sess(null);role=null;$('app').hidden=true;$('login').hidden=false;delete document.body.dataset.role;$('lpw').focus()};
+
+  /* ================= Tabs ================= */
+  function showTab(t){
+    ['bill','meds','set'].forEach(function(n){$('view-'+n).hidden=(n!==t)});
+    document.querySelectorAll('#tabs button').forEach(function(b){b.classList.toggle('on',b.dataset.tab===t)});
+    window.scrollTo(0,0);
+  }
+  $('tabs').onclick=function(e){var t=e.target.dataset&&e.target.dataset.tab;if(t)showTab(t)};
+
+  /* ================= Medicines ================= */
+  function meds(){return load(K_MEDS,[])}
+  function findMed(name){
+    name=(name||'').trim().toLowerCase();if(!name)return null;
+    var l=meds();for(var i=0;i<l.length;i++)if(l[i].name.trim().toLowerCase()===name)return l[i];return null;
+  }
+  function refreshMeds(){
+    var l=meds().slice().sort(function(a,b){return a.name.localeCompare(b.name)});
+    $('medList').innerHTML=l.map(function(m){return '<option value="'+esc(m.name)+'">'}).join('');
+    var q=$('m_search').value.trim().toLowerCase();
+    var v=l.filter(function(m){return !q||m.name.toLowerCase().indexOf(q)>-1});
+    $('mCount').textContent='('+l.length+')';
+    $('mList').innerHTML=v.length?v.map(function(m){
+      return '<tr><td><b>'+esc(m.name)+'</b></td><td>'+esc(m.pack||'')+'</td><td class="r">'+esc(m.mrp||'')+'</td><td class="r"><b>'+esc(m.rate||'')+'</b></td>'+
+        '<td class="r"><button data-edit="'+esc(m.id)+'">ફેરફાર</button> <button class="dng" data-rm="'+esc(m.id)+'">કાઢો</button></td></tr>';
+    }).join(''):'<tr><td colspan="5" class="empty">કોઈ દવા નથી. ઉપર ફોર્મમાં દવા અને રેટ ઉમેરો.</td></tr>';
+  }
+  function clearMedForm(){['m_id','m_name','m_pack','m_batch','m_exp','m_mrp','m_rate'].forEach(function(i){$(i).value=''});$('mTitle').textContent='નવી દવા ઉમેરો'}
+  $('mClear').onclick=clearMedForm;
+  $('mSave').onclick=function(){
+    var name=$('m_name').value.trim();
+    if(!name){toast('દવાનું નામ લખો');$('m_name').focus();return}
+    if($('m_rate').value.trim()===''){toast('રેટ (કિંમત) લખો');$('m_rate').focus();return}
+    var l=meds(),id=$('m_id').value,idx=-1;
+    l.forEach(function(m,i){if(m.id===id||(!id&&m.name.trim().toLowerCase()===name.toLowerCase()))idx=i});
+    var m={id:idx>-1?l[idx].id:String(Date.now()),name:name,pack:$('m_pack').value.trim(),batch:$('m_batch').value.trim(),
+      exp:$('m_exp').value.trim(),mrp:$('m_mrp').value.trim(),rate:$('m_rate').value.trim()};
+    if(idx>-1)l[idx]=m;else l.push(m);
+    if(!store(K_MEDS,l)){toast('સેવ ન થયું – સ્ટોરેજ ભરેલું છે');return}
+    clearMedForm();refreshMeds();toast(idx>-1?'દવા અપડેટ થઈ':'દવા ઉમેરાઈ');
+  };
+  $('m_search').oninput=refreshMeds;
+  $('mList').onclick=function(e){
+    var ed=e.target.getAttribute('data-edit'),rm=e.target.getAttribute('data-rm'),l=meds();
+    if(ed){var m=l.filter(function(x){return x.id===ed})[0];if(!m)return;
+      $('m_id').value=m.id;$('m_name').value=m.name;$('m_pack').value=m.pack||'';$('m_batch').value=m.batch||'';
+      $('m_exp').value=m.exp||'';$('m_mrp').value=m.mrp||'';$('m_rate').value=m.rate||'';
+      $('mTitle').textContent='દવામાં ફેરફાર કરો';window.scrollTo({top:0,behavior:'smooth'})}
+    if(rm&&confirm('આ દવા કાઢી નાખવી?')){store(K_MEDS,l.filter(function(x){return x.id!==rm}));refreshMeds()}
+  };
+
+  /* ================= Settings & backup ================= */
+  $('sSave').onclick=function(){
+    var a=$('s_admin').value,u=$('s_user').value;
+    if((a&&a.length<4)||(u&&u.length<4)){toast('પાસવર્ડ ઓછામાં ઓછા ૪ અક્ષરનો રાખો');return}
+    Promise.all([a?hash(a):null,u?hash(u):null]).then(function(h){
+      if(h[0])auth.admin=h[0];if(h[1])auth.user=h[1];
+      auth.userEdit=$('s_edit').checked;store(K_AUTH,auth);
+      $('s_admin').value='';$('s_user').value='';applyLock();toast('સેટિંગ સેવ થયું');
+    });
+  };
+  function download(name,text){
+    var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'application/json'}));
+    a.download=name;document.body.appendChild(a);a.click();a.remove();
+  }
+  $('bExp').onclick=function(){download('tvasha-backup-'+today()+'.json',JSON.stringify({meds:meds(),bills:load(K_BILLS,[])}))};
+  $('bImp').onclick=function(){$('bFile').click()};
+  $('bFile').onchange=function(){
+    var f=this.files[0];if(!f)return;var r=new FileReader();
+    r.onload=function(){
+      try{var d=JSON.parse(r.result);
+        if(!Array.isArray(d.meds)||!Array.isArray(d.bills))throw 0;
+        if(!confirm('હાલની દવા અને બિલ આ ફાઈલથી બદલાઈ જશે. ચાલુ રાખવું?'))return;
+        store(K_MEDS,d.meds);store(K_BILLS,d.bills);refreshMeds();renderHistory();toast('Import થઈ ગયું');
+      }catch(e){toast('ફાઈલ માન્ય નથી')}
+    };
+    r.readAsText(f);this.value='';
+  };
+
+  /* ================= Bill: numbers & words ================= */
   function nextInvNo(){
     var c=load(K_CNT,17513);
-    (load(K_BILLS,[])).forEach(function(b){var m=/^A(\d+)$/.exec(b.invNo||'');if(m&&+m[1]>c)c=+m[1]});
-    c=c+1; store(K_CNT,c);
-    return 'A'+String(c).padStart(6,'0');
+    load(K_BILLS,[]).forEach(function(b){var m=/^A(\d+)$/.exec(b.invNo||'');if(m&&+m[1]>c)c=+m[1]});
+    c++;store(K_CNT,c);return 'A'+String(c).padStart(6,'0');
   }
   function bumpCounter(inv){var m=/^A(\d+)$/.exec(inv||'');if(m&&+m[1]>load(K_CNT,0))store(K_CNT,+m[1])}
-
-  /* ---------- Amount in words (Indian system) ---------- */
   var A=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
   var T=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
   function two(n){return n<20?A[n]:T[Math.floor(n/10)]+(n%10?' '+A[n%10]:'')}
@@ -197,119 +438,109 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
   function intWords(n){
     if(n===0)return 'Zero';
     var p=[],cr=Math.floor(n/1e7),la=Math.floor(n%1e7/1e5),th=Math.floor(n%1e5/1e3),re=n%1000;
-    if(cr)p.push(two(cr)+' Crore');
-    if(la)p.push(two(la)+' Lakh');
-    if(th)p.push(two(th)+' Thousand');
-    if(re)p.push((p.length&&re<100?'and ':'')+three(re));
-    return p.join(' ');
+    if(cr)p.push(two(cr)+' Crore');if(la)p.push(two(la)+' Lakh');if(th)p.push(two(th)+' Thousand');
+    if(re)p.push((p.length&&re<100?'and ':'')+three(re));return p.join(' ');
   }
-  function amountWords(x){
-    var c=Math.round(x*100),r=Math.floor(c/100),p=c%100;
-    return 'Rs. '+intWords(r)+(p?' and '+two(p)+' Paise':'')+' only';
-  }
+  function amountWords(x){var c=Math.round(x*100),r=Math.floor(c/100),p=c%100;return 'Rs. '+intWords(r)+(p?' and '+two(p)+' Paise':'')+' only'}
 
-  /* ---------- Rows ---------- */
+  /* ================= Bill: rows ================= */
+  function lockedForUser(){return role==='user'&&!(auth&&auth.userEdit)}
+  function applyLock(){
+    var lk=lockedForUser();
+    document.querySelectorAll('#rows [data-f=mrp],#rows [data-f=rate]').forEach(function(i){i.readOnly=lk;i.title=lk?'રેટ Admin નક્કી કરે છે':''});
+  }
   function addRow(d){
-    d=d||{};
-    var tr=document.createElement('tr');
-    var h='<td class="sn"></td>';
+    d=d||{};var tr=document.createElement('tr'),h='<td class="sn"></td>';
     FIELDS.forEach(function(f){
-      h+='<td'+(NUMERIC[f]?' class="num"':'')+'><input data-f="'+f+'"'+(NUMERIC[f]?' inputmode="decimal"':'')+' value="'+esc(d[f]||'')+'"></td>';
+      h+='<td'+(NUMERIC[f]?' class="num"':'')+'><input data-f="'+f+'"'+(NUMERIC[f]?' inputmode="decimal"':'')+(f==='name'?' list="medList"':'')+' value="'+esc(d[f]||'')+'"></td>';
     });
     h+='<td class="amt"></td><td class="act"><button class="del" title="Delete row" aria-label="Delete row">✕</button></td>';
-    tr.innerHTML=h;
-    $('rows').appendChild(tr);
+    tr.innerHTML=h;$('rows').appendChild(tr);applyLock();
   }
   function recalc(){
     var total=0;
     Array.prototype.forEach.call($('rows').children,function(tr,i){
       tr.children[0].textContent=i+1;
-      var q=num(tr.querySelector('[data-f=qty]').value),r=num(tr.querySelector('[data-f=rate]').value);
-      var a=Math.round(q*r*100)/100;
-      tr.querySelector('.amt').textContent=a?a.toFixed(2):'';
-      total+=a;
+      var a=Math.round(num(tr.querySelector('[data-f=qty]').value)*num(tr.querySelector('[data-f=rate]').value)*100)/100;
+      tr.querySelector('.amt').textContent=a?a.toFixed(2):'';total+=a;
     });
     var g=Math.max(0,Math.round((total-num($('disc').value))*100)/100);
-    $('grand').textContent=g.toFixed(2);
-    $('words').textContent=amountWords(g);
+    $('grand').textContent=g.toFixed(2);$('words').textContent=amountWords(g);
   }
+  $('rows').addEventListener('input',function(e){
+    if(e.target.dataset.f!=='name')return;
+    var m=findMed(e.target.value);if(!m)return;
+    var tr=e.target.closest('tr');
+    ['pack','batch','exp','mrp','rate'].forEach(function(f){tr.querySelector('[data-f='+f+']').value=m[f]||''});
+    var q=tr.querySelector('[data-f=qty]');if(!q.value)q.value='1';
+  });
 
-  /* ---------- Bill <-> DOM ---------- */
+  /* ================= Bill: data ================= */
   function getBill(){
     var items=[];
-    Array.prototype.forEach.call($('rows').children,function(tr){
-      var o={};FIELDS.forEach(function(f){o[f]=tr.querySelector('[data-f='+f+']').value});items.push(o);
-    });
-    return {invNo:$('invNo').value,date:$('date').value,pName:$('pName').value,pAddr:$('pAddr').value,
-      drName:$('drName').value,drReg:$('drReg').value,disc:$('disc').value,remark:$('remark').value,
-      items:items,total:$('grand').textContent};
+    Array.prototype.forEach.call($('rows').children,function(tr){var o={};FIELDS.forEach(function(f){o[f]=tr.querySelector('[data-f='+f+']').value});items.push(o)});
+    return {invNo:$('invNo').value,date:$('date').value,pName:$('pName').value,pAddr:$('pAddr').value,drName:$('drName').value,
+      drReg:$('drReg').value,disc:$('disc').value,remark:$('remark').value,items:items,total:$('grand').textContent};
   }
   function setBill(b){
-    $('invNo').value=b.invNo||'';$('date').value=b.date||today();
-    $('pName').value=b.pName||'';$('pAddr').value=b.pAddr||'';
-    $('drName').value=b.drName||'';$('drReg').value=b.drReg||'';
-    $('disc').value=b.disc||'';$('remark').value=b.remark||'';
-    $('rows').innerHTML='';
-    (b.items&&b.items.length?b.items:[{}]).forEach(addRow);
-    recalc();
+    $('invNo').value=b.invNo||'';$('date').value=b.date||today();$('pName').value=b.pName||'';$('pAddr').value=b.pAddr||'';
+    $('drName').value=b.drName||'';$('drReg').value=b.drReg||'';$('disc').value=b.disc||'';$('remark').value=b.remark||'';
+    $('rows').innerHTML='';(b.items&&b.items.length?b.items:[{}]).forEach(addRow);recalc();
   }
-  function getShop(){return {email:$('email').value,gstin:$('gstin').value,dl:$('dl').value}}
-  function persist(){store(K_DRAFT,getBill());store(K_SHOP,getShop())}
+  function persist(){store(K_DRAFT,getBill());store(K_SHOP,{email:$('email').value,gstin:$('gstin').value,dl:$('dl').value})}
 
-  /* ---------- History ---------- */
   function renderHistory(){
     var list=load(K_BILLS,[]),ul=$('histList');
     if(!list.length){ul.innerHTML='<li class="empty">હજી કોઈ બિલ સેવ નથી. બિલ બનાવીને "બિલ સેવ કરો" દબાવો.</li>';return}
     ul.innerHTML=list.map(function(b,i){
-      return '<li><div class="t"><b>'+esc(b.invNo||'—')+'</b> · '+esc(b.pName||'નામ નથી')+
-        '<small>'+esc(fmtDate(b.date))+' · Rs. '+esc(b.total||'0.00')+'</small></div>'+
-        '<button data-open="'+i+'">ખોલો</button><button class="d" data-del="'+i+'">કાઢી નાખો</button></li>';
+      return '<li><div class="t"><b>'+esc(b.invNo||'—')+'</b> · '+esc(b.pName||'નામ નથી')+'<small>'+esc(fmtDate(b.date))+' · Rs. '+esc(b.total||'0.00')+'</small></div>'+
+        '<button data-open="'+i+'">ખોલો</button>'+(role==='admin'?'<button class="dng" data-del="'+i+'">કાઢી નાખો</button>':'')+'</li>';
     }).join('');
   }
   function saveBill(){
     var b=getBill();
     if(!b.invNo){toast('પહેલા Invoice No. લખો');$('invNo').focus();return}
-    var list=load(K_BILLS,[]),idx=-1;
-    list.forEach(function(x,i){if(x.invNo===b.invNo)idx=i});
-    b.savedAt=Date.now();
-    if(idx>=0)list.splice(idx,1);
-    list.unshift(b);
+    var list=load(K_BILLS,[]),idx=-1;list.forEach(function(x,i){if(x.invNo===b.invNo)idx=i});
+    b.savedAt=Date.now();if(idx>=0)list.splice(idx,1);list.unshift(b);
     if(!store(K_BILLS,list)){toast('સેવ ન થયું – બ્રાઉઝર સ્ટોરેજ ભરેલું છે');return}
     bumpCounter(b.invNo);renderHistory();toast('બિલ સેવ થયું');
   }
   function newBill(){
     var b=getBill();
-    var hasData=b.pName||b.items.some(function(r){return r.name||r.qty});
-    if(hasData&&!confirm('નવું બિલ શરૂ કરવું? સેવ ન કરેલો ફેરફાર જતો રહેશે.'))return;
+    if((b.pName||b.items.some(function(r){return r.name||r.qty}))&&!confirm('નવું બિલ શરૂ કરવું? સેવ ન કરેલો ફેરફાર જતો રહેશે.'))return;
     setBill({invNo:nextInvNo(),date:today()});persist();
   }
-
-  /* ---------- Events ---------- */
   $('btnAdd').onclick=function(){addRow();recalc();persist()};
   $('btnSave').onclick=saveBill;
   $('btnNew').onclick=newBill;
   $('btnPrint').onclick=function(){persist();window.print()};
   $('rows').addEventListener('click',function(e){
     if(!e.target.classList.contains('del'))return;
-    var tr=e.target.closest('tr');
-    if($('rows').children.length===1){setBill(Object.assign(getBill(),{items:[{}]}));}
-    else tr.remove();
+    if($('rows').children.length===1)setBill(Object.assign(getBill(),{items:[{}]}));else e.target.closest('tr').remove();
     recalc();persist();
   });
-  document.addEventListener('input',function(){recalc();persist()});
+  document.addEventListener('input',function(e){if(e.target.closest&&e.target.closest('#sheet')){recalc();persist()}});
   $('histList').addEventListener('click',function(e){
     var list=load(K_BILLS,[]),o=e.target.getAttribute('data-open'),d=e.target.getAttribute('data-del');
     if(o!==null){setBill(list[+o]);persist();window.scrollTo({top:0,behavior:'smooth'});toast('બિલ ખુલ્યું')}
-    if(d!==null&&confirm('આ બિલ કાઢી નાખવું?')){list.splice(+d,1);store(K_BILLS,list);renderHistory()}
+    if(d!==null&&role==='admin'&&confirm('આ બિલ કાઢી નાખવું?')){list.splice(+d,1);store(K_BILLS,list);renderHistory()}
   });
 
-  /* ---------- Init ---------- */
-  var shop=load(K_SHOP,{});
-  $('email').value=shop.email||'';$('gstin').value=shop.gstin||'';$('dl').value=shop.dl||'';
-  var draft=load(K_DRAFT,null);
-  if(draft){setBill(draft)}else{setBill({invNo:nextInvNo(),date:today()});persist()}
-  renderHistory();
+  /* ================= Init ================= */
+  function init(){
+    var shop=load(K_SHOP,{});
+    $('email').value=shop.email||'';$('gstin').value=shop.gstin||'';$('dl').value=shop.dl||'';
+    var draft=load(K_DRAFT,null);
+    if(draft)setBill(draft);else{setBill({invNo:nextInvNo(),date:today()});persist()}
+    renderHistory();$('s_edit').checked=!!auth.userEdit;
+    var r=sess();if(r==='admin'||r==='user')enter(r);else $('lpw').focus();
+  }
+  auth=load(K_AUTH,null);
+  if(auth&&auth.admin&&auth.user)init();
+  else Promise.all([hash('admin123'),hash('1234')]).then(function(h){
+    auth={admin:h[0],user:h[1],userEdit:false};store(K_AUTH,auth);init();
+  });
 })();
 </script>
 </body>
-  </html>
+</html>
