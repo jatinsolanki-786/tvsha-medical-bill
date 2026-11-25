@@ -110,7 +110,7 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
 .sign{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-top:10px;min-height:70px}
 .sign .remark{flex:1}
 .sign .auth{text-align:center;font-size:13px}
-.sign .auth .sig{display:block;height:46px;max-width:100%;margin:6px auto 0}
+.sign .auth .sig{display:block;height:62px;max-width:100%;margin:6px auto 0}
 .sign .auth .line{margin-top:2px;border-top:1px solid var(--ink);padding-top:2px;font-weight:600}
 .history ul{list-style:none;margin:0;padding:0}
 .history li{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:9px 0;border-top:1px solid #edf1f3}
@@ -122,6 +122,14 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
 .toast.on{opacity:1}
 @media (max-width:700px){.lcard{grid-template-columns:1fr}.lbrand{padding:26px;gap:20px}.lform{padding:26px 22px}.info,.foot{grid-template-columns:1fr}}
 
+.sugg{position:fixed;z-index:30;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 16px 40px -12px rgba(15,31,46,.4);max-height:320px;overflow:auto}
+.sugg div{padding:9px 12px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #f0f3f5}
+.sugg div:last-child{border:0}
+.sugg div.on,.sugg div:hover{background:var(--tint)}
+.sugg mark{background:#fff1bf;color:inherit;border-radius:2px}
+.sugg small{color:var(--muted);white-space:nowrap;font-size:12px}
+.sugg .none{color:var(--muted);cursor:default}
+@media print{.sugg{display:none!important}}
 @page{size:A5 landscape;margin:6mm}
 @media print{
   body{background:#fff;font-size:11px}
@@ -232,13 +240,13 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
         <div class="remark"><label class="f"><span>Remark</span><input id="remark"></label></div>
         <div class="auth">
           For ત્વિશા મેડિકલ &amp; સર્જીકલ સ્ટોર
-          <img class="sig" alt="Signature" src="data:image/png;base64,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..." >
+          <img class="sig" alt="" src="sign.png" onerror="this.style.display='none'">
           <div class="line">Authorised Signatory</div>
         </div>
       </div>
     </div>
     </div>
-    <datalist id="medList"></datalist>
+    <div class="sugg" id="sugg" hidden></div>
     <section class="card history" style="margin-top:18px">
       <h2>સેવ કરેલા બિલ</h2>
       <ul id="histList"></ul>
@@ -363,7 +371,6 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
   }
   function refreshMeds(){
     var l=meds().slice().sort(function(a,b){return a.name.localeCompare(b.name)});
-    $('medList').innerHTML=l.map(function(m){return '<option value="'+esc(m.name)+'">'}).join('');
     var q=$('m_search').value.trim().toLowerCase();
     var v=l.filter(function(m){return !q||m.name.toLowerCase().indexOf(q)>-1});
     $('mCount').textContent='('+l.length+')';
@@ -452,7 +459,7 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
   function addRow(d){
     d=d||{};var tr=document.createElement('tr'),h='<td class="sn"></td>';
     FIELDS.forEach(function(f){
-      h+='<td'+(NUMERIC[f]?' class="num"':'')+'><input data-f="'+f+'"'+(NUMERIC[f]?' inputmode="decimal"':'')+(f==='name'?' list="medList"':'')+' value="'+esc(d[f]||'')+'"></td>';
+      h+='<td'+(NUMERIC[f]?' class="num"':'')+'><input data-f="'+f+'"'+(NUMERIC[f]?' inputmode="decimal"':'')+(f==='name'?' autocomplete="off"':'')+' value="'+esc(d[f]||'')+'"></td>';
     });
     h+='<td class="amt"></td><td class="act"><button class="del" title="Delete row" aria-label="Delete row">✕</button></td>';
     tr.innerHTML=h;$('rows').appendChild(tr);applyLock();
@@ -467,13 +474,72 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
     var g=Math.max(0,Math.round((total-num($('disc').value))*100)/100);
     $('grand').textContent=g.toFixed(2);$('words').textContent=amountWords(g);
   }
-  $('rows').addEventListener('input',function(e){
-    if(e.target.dataset.f!=='name')return;
-    var m=findMed(e.target.value);if(!m)return;
-    var tr=e.target.closest('tr');
+
+  /* ---------- Smart suggestions ---------- */
+  var sg=$('sugg'),sgList=[],sgIdx=-1,sgInput=null;
+  function norm(s){return String(s).toLowerCase().replace(/[^0-9a-z\u0A80-\u0AFF]+/g,'')}
+  function score(name,q){
+    var nn=norm(name),qn=norm(q);if(!qn)return -1;
+    if(nn.indexOf(qn)===0)return 0;
+    var w=name.toLowerCase().split(/[^0-9a-z\u0A80-\u0AFF]+/);
+    for(var i=0;i<w.length;i++)if(w[i]&&norm(w[i]).indexOf(qn)===0)return 1;
+    if(nn.indexOf(qn)>-1)return 2;
+    var t=q.toLowerCase().split(/\s+/).map(norm).filter(Boolean);
+    if(t.length>1&&t.every(function(x){return nn.indexOf(x)>-1}))return 3;
+    return -1;
+  }
+  function placeSugg(){
+    if(!sgInput||sg.hidden)return;
+    var r=sgInput.getBoundingClientRect(),w=Math.min(Math.max(r.width,300),window.innerWidth-16);
+    sg.style.width=w+'px';
+    sg.style.left=Math.max(8,Math.min(r.left,window.innerWidth-w-8))+'px';
+    var h=sg.offsetHeight;
+    sg.style.top=((r.bottom+h+8>window.innerHeight&&r.top>h+8)?r.top-h-4:r.bottom+4)+'px';
+  }
+  function hideSugg(){sg.hidden=true;sgList=[];sgIdx=-1}
+  function markSugg(){Array.prototype.forEach.call(sg.children,function(d,i){d.classList.toggle('on',i===sgIdx);if(i===sgIdx&&d.scrollIntoView)d.scrollIntoView({block:'nearest'})})}
+  function showSugg(inp){
+    var q=inp.value.trim();
+    if(!q){hideSugg();return}
+    var out=[];
+    meds().forEach(function(m){var s=score(m.name,q);if(s>-1)out.push({m:m,s:s})});
+    out.sort(function(a,b){return a.s-b.s||a.m.name.localeCompare(b.m.name)});
+    sgList=out.slice(0,8).map(function(o){return o.m});sgIdx=sgList.length?0:-1;sgInput=inp;
+    var ql=q.toLowerCase();
+    sg.innerHTML=sgList.length?sgList.map(function(m,i){
+      var n=m.name,k=n.toLowerCase().indexOf(ql);
+      var h=k>-1?esc(n.slice(0,k))+'<mark>'+esc(n.slice(k,k+q.length))+'</mark>'+esc(n.slice(k+q.length)):esc(n);
+      return '<div data-i="'+i+'"'+(i===0?' class="on"':'')+'><span><b>'+h+'</b>'+(m.pack?' <small>'+esc(m.pack)+'</small>':'')+'</span><small>'+(m.mrp?'MRP '+esc(m.mrp)+' · ':'')+'રેટ '+esc(m.rate||'0')+'</small></div>';
+    }).join(''):'<div class="none">આ નામની દવા યાદીમાં નથી</div>';
+    sg.hidden=false;placeSugg();
+  }
+  function fillRow(tr,m){
+    tr.querySelector('[data-f=name]').value=m.name;
     ['pack','batch','exp','mrp','rate'].forEach(function(f){tr.querySelector('[data-f='+f+']').value=m[f]||''});
     var q=tr.querySelector('[data-f=qty]');if(!q.value)q.value='1';
+  }
+  function pickSugg(i){
+    var m=sgList[i],inp=sgInput;if(!m||!inp)return;
+    var tr=inp.closest('tr');fillRow(tr,m);hideSugg();recalc();persist();
+    var q=tr.querySelector('[data-f=qty]');q.focus();q.select();
+  }
+  $('rows').addEventListener('input',function(e){if(e.target.dataset.f==='name')showSugg(e.target)});
+  $('rows').addEventListener('keydown',function(e){
+    if(e.target.dataset.f!=='name'||sg.hidden)return;
+    if(e.key==='ArrowDown'&&sgList.length){e.preventDefault();sgIdx=(sgIdx+1)%sgList.length;markSugg()}
+    else if(e.key==='ArrowUp'&&sgList.length){e.preventDefault();sgIdx=(sgIdx-1+sgList.length)%sgList.length;markSugg()}
+    else if(e.key==='Enter'&&sgList.length){e.preventDefault();pickSugg(sgIdx)}
+    else if(e.key==='Escape'){hideSugg()}
   });
+  $('rows').addEventListener('focusout',function(){setTimeout(function(){if(document.activeElement!==sgInput)hideSugg()},150)});
+  $('rows').addEventListener('change',function(e){
+    if(e.target.dataset.f!=='name')return;
+    var m=findMed(e.target.value),tr=e.target.closest('tr');
+    if(m&&!tr.querySelector('[data-f=rate]').value){fillRow(tr,m);recalc();persist()}
+  });
+  sg.addEventListener('mousedown',function(e){e.preventDefault();var d=e.target.closest('[data-i]');if(d)pickSugg(+d.dataset.i)});
+  window.addEventListener('scroll',placeSugg,true);
+  window.addEventListener('resize',placeSugg);
 
   /* ================= Bill: data ================= */
   function getBill(){
