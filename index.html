@@ -133,18 +133,19 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
 .sugg mark{background:#fff1bf;color:inherit;border-radius:2px}
 .sugg small{color:var(--muted);white-space:nowrap;font-size:12px}
 .sugg .none{color:var(--muted);cursor:default}
-.sugg .sub{display:block;font-size:12px;font-style:normal;color:var(--muted);margin-top:2px;white-space:normal;line-height:1.35}
-.sugg .sgnote{margin:0;padding:6px 12px;font-size:11px;color:var(--muted);background:#f8fafb}
-.medinfo{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;width:min(560px,calc(100% - 24px));z-index:25;padding:10px 14px;border-radius:14px;background:#fff;border:1.5px solid var(--brand);box-shadow:0 18px 40px -14px rgba(15,31,46,.5);font-size:13px;line-height:1.5;cursor:pointer}
-.medinfo b{color:var(--brand-d)}
+.subbox{margin-top:12px;padding:12px 14px;border-radius:12px;background:#f3f9f7;border:1px solid #cfe5df;line-height:1.6}
+.altrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid #edf1f3}
+.altrow button{padding:6px 12px;font-size:12px;white-space:nowrap}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:1px 8px;border-radius:99px;background:#e4ecef;color:var(--muted)}
+.tag.ok{background:#d9f2e8;color:#0a5a45}.tag.warn{background:#fdecc8;color:#7a4b00}
 .scanin{width:100%;min-width:64px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:#fff}
 #scanRows td{vertical-align:middle}
 #scanRows input[type=checkbox]{width:18px;height:18px}
-@media print{.sugg,.medinfo{display:none!important}}
+@media print{.sugg{display:none!important}}
 @page{size:A5 landscape;margin:6mm}
 @media print{
   body{background:#fff;font-size:11px}
-  #login,.topbar,.billbar,.history,.addrow,.act,.toast,.view:not(#view-bill){display:none!important}
+  #login,.topbar,.billbar,.history,#subCard,.addrow,.act,.toast,.view:not(#view-bill){display:none!important}
   .view{max-width:none;margin:0;padding:0}
   .scroll{overflow:visible}
   .sheet{min-width:0;border-width:1.5px;padding:6px 8px}
@@ -238,7 +239,6 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
         <tbody id="rows"></tbody>
       </table>
       <div class="addrow"><button id="btnAdd">+ Add Row</button></div>
-      <div class="medinfo" id="medinfo" hidden></div>
       <div class="foot">
         <div>
           <div class="words" id="words"></div>
@@ -261,6 +261,12 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
     </div>
     </div>
     <div class="sugg" id="sugg" hidden></div>
+    <section class="card" id="subCard" style="margin-top:18px">
+      <h2>🔎 બ્રાન્ડ શોધ: હેતુ, Content અને સ્ટોરમાં વિકલ્પ</h2>
+      <p class="hint" style="margin:0 0 10px">ડૉક્ટરે લખેલું બ્રાન્ડ નામ લખો. તેનો હેતુ (ગુજરાતીમાં), Content (English) અને તમારા સ્ટોરમાં સેમ Content વાળી દવાઓ દેખાશે.</p>
+      <div class="pw"><input class="fld" id="subQ" placeholder="દા.ત. Dolo 650, Crocin, Azithral" autocomplete="off"><button class="pri" id="subGo">શોધો</button></div>
+      <div id="subOut"></div>
+    </section>
     <section class="card history" style="margin-top:18px">
       <h2>સેવ કરેલા બિલ</h2>
       <ul id="histList"></ul>
@@ -312,6 +318,8 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
     <div class="card">
       <h2>દવાની યાદી <span id="mCount" class="hint"></span></h2>
       <input class="fld" id="m_search" placeholder="દવા શોધો…" style="margin-bottom:10px">
+      <div class="actions" style="margin:0 0 6px"><button id="aiFill">🤖 ખૂટતું Content AI થી ભરો</button></div>
+      <p class="hint" id="fillMsg" style="margin:0 0 10px"></p>
       <div class="scroll">
         <table class="mtable">
           <thead><tr><th>દવા</th><th>પેક</th><th class="r">MRP</th><th class="r">રેટ</th><th></th></tr></thead>
@@ -338,10 +346,11 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
       <p class="hint" style="margin:0 0 10px">૧) aistudio.google.com/apikey ખોલો ૨) Create API key દબાવો ૩) કી કોપી કરી નીચે પેસ્ટ કરો. ફોટો વાંચવા માટે Google ને મોકલાય છે.</p>
       <div class="grid">
         <label>Gemini API કી<input class="fld" id="ai_key" type="password" autocomplete="off"></label>
-        <label>Model (ખાલી રાખો તો ચાલશે)<input class="fld" id="ai_model" placeholder="gemini-2.5-flash"></label>
+        <label>Model (ખાલી રાખો તો ચાલશે)<input class="fld" id="ai_model" placeholder="gemini-flash-latest"></label>
       </div>
       <p class="hint">આ કી ફક્ત આ ફોનમાં સચવાય છે, ઓનલાઈન ડેટામાં કે બીજા ફોનમાં નહીં.</p>
-      <div class="actions"><button class="pri" id="aiSave">કી સેવ કરો</button></div>
+      <div class="actions"><button class="pri" id="aiSave">કી સેવ કરો</button><button id="aiTest">કી ચકાસો</button></div>
+      <p class="hint" id="aiMsg"></p>
     </div>
     <div class="card">
       <h2>બેકઅપ</h2>
@@ -442,7 +451,7 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
     var l=meds(),id=$('m_id').value,idx=-1;
     l.forEach(function(m,i){if(m.id===id||(!id&&m.name.trim().toLowerCase()===name.toLowerCase()))idx=i});
     var m={id:idx>-1?l[idx].id:String(Date.now()),name:name,pack:$('m_pack').value.trim(),batch:$('m_batch').value.trim(),
-      exp:$('m_exp').value.trim(),mrp:$('m_mrp').value.trim(),rate:$('m_rate').value.trim()||$('m_mrp').value.trim(),content:$('m_content').value.trim(),use:$('m_use').value.trim()};
+      exp:$('m_exp').value.trim(),mrp:$('m_mrp').value.trim(),rate:$('m_rate').value.trim()||$('m_mrp').value.trim(),content:$('m_content').value.trim(),use:$('m_use').value.trim(),csrc:(idx>-1&&l[idx].csrc&&l[idx].content===$('m_content').value.trim())?l[idx].csrc:''};
     if(idx>-1)l[idx]=m;else l.push(m);
     if(!store(K_MEDS,l)){toast('સેવ ન થયું – સ્ટોરેજ ભરેલું છે');return}
     if(cloudOk())medRef(m.id).set(m).catch(cerr);
@@ -474,13 +483,13 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
       im.src=u;
     });
   }
-  function callGemini(b64){
+  function geminiRaw(parts,wantJson){
     var ai=load(K_AI,{});if(!ai.key)return Promise.reject(new Error('nokey'));
-    var models=[ai.model||'gemini-2.5-flash','gemini-flash-latest'].filter(function(m,i,a){return a.indexOf(m)===i});
+    var models=[ai.model||'gemini-flash-latest','gemini-2.5-flash','gemini-2.0-flash'].filter(function(m,i,a){return a.indexOf(m)===i});
     function attempt(i){
-      return fetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(models[i])+':generateContent?key='+encodeURIComponent(ai.key),{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({contents:[{parts:[{text:SCAN_PROMPT},{inline_data:{mime_type:'image/jpeg',data:b64}}]}],generationConfig:{temperature:0,responseMimeType:'application/json'}})
+      return fetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(models[i])+':generateContent',{
+        method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':ai.key},
+        body:JSON.stringify({contents:[{parts:parts}],generationConfig:wantJson?{temperature:0,responseMimeType:'application/json'}:{temperature:0}})
       }).then(function(r){return r.json().catch(function(){return {}}).then(function(j){
         if(!r.ok){
           var msg=(j.error&&j.error.message)||('HTTP '+r.status);
@@ -488,13 +497,22 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
           throw new Error(msg);
         }
         return j;
-      })});
+      })},function(){throw new Error('ઈન્ટરનેટ કે નેટવર્કમાં સમસ્યા')});
     }
     return attempt(0);
   }
+  function textOf(j){var c=j&&j.candidates&&j.candidates[0];return c&&c.content&&c.content.parts?c.content.parts.map(function(p){return p.text||''}).join(''):''}
+  function callGemini(b64){return geminiRaw([{text:SCAN_PROMPT},{inline_data:{mime_type:'image/jpeg',data:b64}}],true)}
+  function geminiText(prompt){return geminiRaw([{text:prompt}],true).then(textOf)}
+  function jparse(t){
+    t=String(t||'').replace(/```json|```/g,'').trim();
+    var a=t.search(/[\[{]/);if(a>0)t=t.slice(a);
+    var z=Math.max(t.lastIndexOf(']'),t.lastIndexOf('}'));if(z>-1)t=t.slice(0,z+1);
+    return JSON.parse(t);
+  }
   function cleanNum(v){return String(v==null?'':v).replace(/[^0-9.]/g,'')}
   function parseItems(j){
-    var c=j&&j.candidates&&j.candidates[0],t=c&&c.content&&c.content.parts?c.content.parts.map(function(p){return p.text||''}).join(''):'';
+    var t=textOf(j);
     if(!t)throw new Error('જવાબ મળ્યો નહીં. ફોટો ફરી લો.');
     t=t.replace(/```json|```/g,'').trim();
     var a=t.indexOf('['),z=t.lastIndexOf(']');if(a>-1&&z>a)t=t.slice(a,z+1);
@@ -519,7 +537,7 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
   $('scanRows').addEventListener('change',function(e){if(e.target.getAttribute('data-k')==='ck')scanItems[+e.target.getAttribute('data-i')].ck=e.target.checked});
   $('scanBtn').onclick=function(){
     var ai=load(K_AI,{});
-    if(!ai.key){toast('પહેલા સેટિંગમાં API કી નાખો');showTab('set');return}
+    if(!ai.key){$('scanMsg').textContent='⚠ ફોટો વાંચવા માટે પહેલા "સેટિંગ" ટેબમાં Gemini API કી નાખી "કી સેવ કરો" દબાવો.';return}
     $('scanFile').click();
   };
   $('scanFile').onchange=function(){
@@ -555,6 +573,36 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
     scanItems=[];renderScan();refreshMeds();$('scanMsg').textContent='';toast(pick.length+' દવા ઉમેરાઈ (રેટ = MRP)');
   };
   $('aiSave').onclick=function(){store(K_AI,{key:$('ai_key').value.trim(),model:$('ai_model').value.trim()});toast('કી સેવ થઈ')};
+  $('aiTest').onclick=function(){
+    store(K_AI,{key:$('ai_key').value.trim(),model:$('ai_model').value.trim()});
+    $('aiMsg').textContent='ચકાસાય છે…';
+    geminiRaw([{text:'Reply with the single word OK'}],false).then(function(){
+      $('aiMsg').textContent='✓ કી બરાબર છે. ફોટો વાંચવાનું અને બ્રાન્ડ શોધ ચાલશે.';
+    }).catch(function(e){$('aiMsg').textContent='✗ '+(e.message==='nokey'?'પહેલા કી પેસ્ટ કરો':e.message)});
+  };
+  $('aiFill').onclick=function(){
+    var l=meds(),need=l.filter(function(m){return !contentOf(m)});
+    if(!need.length){$('fillMsg').textContent='બધી દવામાં Content છે.';return}
+    if(!load(K_AI,{}).key){$('fillMsg').textContent='⚠ પહેલા સેટિંગમાં Gemini API કી નાખો.';return}
+    var chunks=[],i,changed=[];for(i=0;i<need.length;i+=30)chunks.push(need.slice(i,i+30));
+    $('aiFill').disabled=true;
+    chunks.reduce(function(p,c,ci){
+      return p.then(function(){
+        $('fillMsg').textContent='AI થી Content શોધાય છે… '+(ci+1)+'/'+chunks.length;
+        return geminiText('For each Indian medicine brand name below, give the active ingredient(s) with strength as usually sold in India (example: "Paracetamol 650mg"). Return ONLY a JSON array [{"name":"","content":""}] in the same order as given. If you are not sure about a brand, content must be an empty string. Names: '+JSON.stringify(c.map(function(m){return m.name}))).then(function(t){
+          var arr=jparse(t);if(!Array.isArray(arr))arr=[];
+          c.forEach(function(m,k){
+            var f=arr.filter(function(x){return String(x.name||'').trim().toLowerCase()===m.name.trim().toLowerCase()})[0]||arr[k];
+            if(f&&String(f.content||'').trim()){m.content=String(f.content).trim();m.csrc='AI';changed.push(m)}
+          });
+        });
+      });
+    },Promise.resolve()).then(function(){
+      store(K_MEDS,l);
+      if(cloudOk()&&changed.length)runOps(changed.map(function(m){return function(b){b.set(medRef(m.id),m)}})).catch(cerr);
+      refreshMeds();$('fillMsg').textContent=changed.length+' દવાનું Content ભરાયું (AI – અંદાજિત, Admin તપાસી લે).';
+    }).catch(function(e){$('fillMsg').textContent='ભૂલ: '+(e.message==='nokey'?'API કી નથી':e.message)}).then(function(){$('aiFill').disabled=false});
+  };
 
   /* ================= Settings & backup ================= */
   $('sSave').onclick=function(){
@@ -685,23 +733,10 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
   function contentOf(m){return m.content||brandContent(m.name)||''}
   function useOf(m){return m.use||useFromText(m.content||brandContent(m.name))||useFromText(m.name)}
   function medSub(m){
-    var c=contentOf(m),u=useOf(m),t=[];if(c)t.push(c);if(u)t.push(u);
+    var c=contentOf(m),u=useOf(m),t=[];
+    if(c)t.push(c+(m.content&&m.csrc==='AI'?' (AI)':''));if(u)t.push(u);
     return t.length?'<br><small class="hint" style="margin:0">'+esc(t.join(' · '))+'</small>':'';
   }
-  function subLine(m){
-    var c=contentOf(m),u=useOf(m),t=[];
-    if(c)t.push('Content: '+esc(c)+(m.content?'':' (અંદાજિત)'));
-    if(u)t.push('ઉપયોગ: '+esc(u));
-    return t.length?'<i class="sub">'+t.join('<br>')+'</i>':'';
-  }
-  function showInfo(m){
-    var el=$('medinfo');if(!m){el.hidden=true;return}
-    var c=contentOf(m),u=useOf(m);
-    if(!c&&!u){el.hidden=true;return}
-    el.innerHTML='<b>'+esc(m.name)+'</b>'+(c?'<br>Content: '+esc(c)+(m.content?'':' (અંદાજિત)'):'')+(u?'<br>ઉપયોગ: '+esc(u):'');
-    el.hidden=false;clearTimeout(showInfo.h);showInfo.h=setTimeout(function(){el.hidden=true},9000);
-  }
-  $('medinfo').onclick=function(){this.hidden=true};
   function medHints(){
     var n=$('m_name').value,bc=brandContent(n),c=$('m_content').value.trim()||bc;
     $('m_content').placeholder=bc?bc+' (આપમેળે)':'દા.ત. Paracetamol 650mg';
@@ -737,15 +772,15 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
     var q=inp.value.trim();
     if(!q){hideSugg();return}
     var out=[];
-    meds().forEach(function(m){var s=score(m.name,q);if(s<0){var s2=score(contentOf(m),q);if(s2>-1)s=4+s2;else{var s3=score(useOf(m),q);if(s3>-1)s=8+s3}}if(s>-1)out.push({m:m,s:s})});
+    meds().forEach(function(m){var s=score(m.name,q);if(s<0){var s2=score(contentOf(m),q);if(s2>-1&&s2<=1)s=4+s2}if(s>-1)out.push({m:m,s:s})});
     out.sort(function(a,b){return a.s-b.s||a.m.name.localeCompare(b.m.name)});
     sgList=out.slice(0,8).map(function(o){return o.m});sgIdx=sgList.length?0:-1;sgInput=inp;
     var ql=q.toLowerCase();
     sg.innerHTML=sgList.length?sgList.map(function(m,i){
       var n=m.name,k=n.toLowerCase().indexOf(ql);
       var h=k>-1?esc(n.slice(0,k))+'<mark>'+esc(n.slice(k,k+q.length))+'</mark>'+esc(n.slice(k+q.length)):esc(n);
-      return '<div data-i="'+i+'"'+(i===0?' class="on"':'')+'><span><b>'+h+'</b>'+(m.pack?' <small>'+esc(m.pack)+'</small>':'')+subLine(m)+'</span><small>'+(m.mrp?'MRP '+esc(m.mrp)+' · ':'')+'રેટ '+esc(m.rate||'0')+'</small></div>';
-    }).join('')+'<p class="sgnote">સામાન્ય માહિતી છે – દવા ડૉક્ટરની સલાહ મુજબ જ લેવી.</p>':'<div class="none">આ નામની દવા યાદીમાં નથી</div>';
+      return '<div data-i="'+i+'"'+(i===0?' class="on"':'')+'><span><b>'+h+'</b>'+(m.pack?' <small>'+esc(m.pack)+'</small>':'')+'</span><small>'+(m.mrp?'MRP '+esc(m.mrp)+' · ':'')+'રેટ '+esc(m.rate||'0')+'</small></div>';
+    }).join(''):'<div class="none">આ નામની દવા યાદીમાં નથી</div>';
     sg.hidden=false;placeSugg();
   }
   function fillRow(tr,m){
@@ -755,7 +790,7 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
   }
   function pickSugg(i){
     var m=sgList[i],inp=sgInput;if(!m||!inp)return;
-    var tr=inp.closest('tr');fillRow(tr,m);hideSugg();recalc();persist();showInfo(m);
+    var tr=inp.closest('tr');fillRow(tr,m);hideSugg();recalc();persist();
     var q=tr.querySelector('[data-f=qty]');q.focus();q.select();
   }
   $('rows').addEventListener('input',function(e){if(e.target.dataset.f==='name')showSugg(e.target)});
@@ -766,7 +801,6 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
     else if(e.key==='Enter'&&sgList.length){e.preventDefault();pickSugg(sgIdx)}
     else if(e.key==='Escape'){hideSugg()}
   });
-  $('rows').addEventListener('focusin',function(e){if(e.target.dataset.f==='name')showInfo(findMed(e.target.value))});
   $('rows').addEventListener('focusout',function(){setTimeout(function(){if(document.activeElement!==sgInput)hideSugg()},150)});
   $('rows').addEventListener('change',function(e){
     if(e.target.dataset.f!=='name')return;
@@ -776,6 +810,74 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
   sg.addEventListener('mousedown',function(e){e.preventDefault();var d=e.target.closest('[data-i]');if(d)pickSugg(+d.dataset.i)});
   window.addEventListener('scroll',placeSugg,true);
   window.addEventListener('resize',placeSugg);
+
+  /* ---------- Brand -> Content -> store alternatives ---------- */
+  var K_BC='tvasha_brandcache';
+  var FORMS=/\b(sodium|potassium|hydrochloride|hcl|trihydrate|dihydrate|besylate|maleate|tartrate|succinate|mesylate|phosphate|sulphate|sulfate|acetate|ip|bp|usp|sr|er|xr|dsr|forte|tablets?|capsules?|syrup|injection)\b/g;
+  function saltSet(c){
+    return String(c||'').toLowerCase().replace(/[()]/g,'+').split(/[+,\/&]|\band\b/).map(function(x){
+      return x.replace(/[0-9.]+\s*(mg|mcg|gm|g|ml|iu|%)?/g,' ').replace(FORMS,' ').replace(/[^a-z ]+/g,' ').replace(/\s+/g,' ').trim();
+    }).filter(Boolean).sort().join('|');
+  }
+  function strengthOf(t){var m=String(t||'').toLowerCase().match(/(\d+(?:\.\d+)?)\s*(mg|mcg|gm|g|ml|iu|%)?/);return m?m[1]+(m[2]||''):''}
+  function resolveBrand(q){
+    var best=null,bs=99;
+    meds().forEach(function(m){var s=score(m.name,q);if(s>-1&&s<=1&&s<bs&&contentOf(m)){bs=s;best=m}});
+    if(best)return {id:best.id,name:best.name,content:contentOf(best),use:useOf(best),src:best.content?(best.csrc==='AI'?'સ્ટોર ડેટા (AI)':'સ્ટોર ડેટા'):'બ્રાન્ડ યાદી (અંદાજિત)'};
+    var bc=brandContent(q);
+    if(bc)return {name:q,content:bc,use:useFromText(bc),src:'બ્રાન્ડ યાદી (અંદાજિત)'};
+    var c=load(K_BC,{})[norm(q)];if(c)return c;
+    var u=useFromText(q);if(u)return {name:q,content:q,use:u,src:'તમે લખેલું Content'};
+    return null;
+  }
+  function alternatives(info,q){
+    var key=saltSet(info.content);if(!key)return [];
+    var qs=strengthOf(info.content)||strengthOf(q);
+    return meds().filter(function(m){return saltSet(contentOf(m))===key}).map(function(m){
+      var ms=strengthOf(contentOf(m))||strengthOf(m.name),st='';
+      if(m.id===info.id)st='self';else if(qs&&ms)st=parseFloat(qs)===parseFloat(ms)?'same':'diff';
+      return {m:m,st:st,ms:ms};
+    }).sort(function(a,b){var o={self:0,same:1,'':2,diff:3};return o[a.st]-o[b.st]||a.m.name.localeCompare(b.m.name)});
+  }
+  function renderSub(info,q){
+    var alts=alternatives(info,q);
+    var h='<div class="subbox"><b>'+esc(info.name||q)+'</b> <span class="tag">'+esc(info.src||'')+'</span>'+
+      '<div>Content: <b>'+esc(info.content)+'</b></div>'+(info.use?'<div>ઉપયોગ: '+esc(info.use)+'</div>':'')+'</div>'+
+      '<h3 style="margin:14px 0 2px;font-size:15px">તમારા સ્ટોરમાં સેમ Content વાળી દવા</h3>';
+    h+=alts.length?alts.map(function(a){
+      var tag=a.st==='self'?'<span class="tag ok">આ જ બ્રાન્ડ સ્ટોરમાં છે</span>':a.st==='same'?'<span class="tag ok">સેમ સ્ટ્રેન્થ</span>':a.st==='diff'?'<span class="tag warn">સ્ટ્રેન્થ અલગ ('+esc(a.ms)+')</span>':'';
+      return '<div class="altrow"><div><b>'+esc(a.m.name)+'</b>'+(a.m.pack?' <small class="hint">'+esc(a.m.pack)+'</small>':'')+
+        '<br><small class="hint" style="margin:0">MRP '+esc(a.m.mrp||'')+' · રેટ '+esc(a.m.rate||'')+'</small> '+tag+'</div><button data-add="'+esc(a.m.id)+'">બિલમાં ઉમેરો</button></div>';
+    }).join(''):'<p class="hint">સ્ટોરમાં સેમ Content વાળી દવા મળી નહીં.</p>';
+    h+='<p class="hint">સામાન્ય માહિતી છે. દવા બદલતા પહેલા ડૉક્ટર/ફાર્માસિસ્ટની સલાહ લો.</p>';
+    $('subOut').innerHTML=h;
+  }
+  function runSub(){
+    var q=$('subQ').value.trim();if(!q)return;
+    var info=resolveBrand(q);
+    if(info){renderSub(info,q);return}
+    if(!load(K_AI,{}).key){$('subOut').innerHTML='<p class="hint">આ બ્રાન્ડનું Content મળ્યું નહીં. Admin સેટિંગમાં AI કી નાખે તો બધી બ્રાન્ડ મળશે. અથવા Content (દા.ત. Paracetamol) લખીને શોધો.</p>';return}
+    $('subOut').innerHTML='<p class="hint">AI થી શોધાય છે…</p>';
+    geminiText('Indian medicine brand name: "'+q+'". Give the active ingredient(s) with strength as usually sold in India, and a SHORT Gujarati phrase (max 10 words) telling what it is used for. Return ONLY JSON: {"content":"example: Paracetamol 650mg","use_gu":"તાવ અને દુખાવા માટે"}. If you are not sure about this brand, return {"content":"","use_gu":""}.').then(function(t){
+      var r=jparse(t);
+      if(!r||!String(r.content||'').trim()){$('subOut').innerHTML='<p class="hint">આ બ્રાન્ડનું Content મળ્યું નહીં. Content લખીને શોધો.</p>';return}
+      var info={name:q,content:String(r.content).trim(),use:String(r.use_gu||'').trim()||useFromText(r.content),src:'AI (અંદાજિત)'};
+      var c=load(K_BC,{});c[norm(q)]=info;store(K_BC,c);
+      renderSub(info,q);
+    }).catch(function(e){$('subOut').innerHTML='<p class="hint">ભૂલ: '+esc(e.message==='nokey'?'API કી નથી':e.message)+'</p>'});
+  }
+  function addToBill(m){
+    var tr=null;
+    Array.prototype.forEach.call($('rows').children,function(r){if(!tr&&!r.querySelector('[data-f=name]').value.trim())tr=r});
+    if(!tr){addRow();tr=$('rows').lastElementChild}
+    fillRow(tr,m);recalc();persist();toast(m.name+' બિલમાં ઉમેરાઈ');
+  }
+  $('subGo').onclick=runSub;
+  $('subQ').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();runSub()}});
+  $('subOut').addEventListener('click',function(e){
+    var id=e.target.getAttribute('data-add');if(!id)return;
+    var m=meds().filter(function(x){return x.id===id})[0];if(m)addToBill(m);
+  });
 
   /* ================= Bill: data ================= */
   function getBill(){
