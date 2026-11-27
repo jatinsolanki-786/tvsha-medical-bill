@@ -133,7 +133,14 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
 .sugg mark{background:#fff1bf;color:inherit;border-radius:2px}
 .sugg small{color:var(--muted);white-space:nowrap;font-size:12px}
 .sugg .none{color:var(--muted);cursor:default}
-@media print{.sugg{display:none!important}}
+.sugg .sub{display:block;font-size:12px;font-style:normal;color:var(--muted);margin-top:2px;white-space:normal;line-height:1.35}
+.sugg .sgnote{margin:0;padding:6px 12px;font-size:11px;color:var(--muted);background:#f8fafb}
+.medinfo{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;width:min(560px,calc(100% - 24px));z-index:25;padding:10px 14px;border-radius:14px;background:#fff;border:1.5px solid var(--brand);box-shadow:0 18px 40px -14px rgba(15,31,46,.5);font-size:13px;line-height:1.5;cursor:pointer}
+.medinfo b{color:var(--brand-d)}
+.scanin{width:100%;min-width:64px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:#fff}
+#scanRows td{vertical-align:middle}
+#scanRows input[type=checkbox]{width:18px;height:18px}
+@media print{.sugg,.medinfo{display:none!important}}
 @page{size:A5 landscape;margin:6mm}
 @media print{
   body{background:#fff;font-size:11px}
@@ -231,6 +238,7 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
         <tbody id="rows"></tbody>
       </table>
       <div class="addrow"><button id="btnAdd">+ Add Row</button></div>
+      <div class="medinfo" id="medinfo" hidden></div>
       <div class="foot">
         <div>
           <div class="words" id="words"></div>
@@ -262,6 +270,27 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
   <!-- ---- Medicines (admin) ---- -->
   <section class="view" id="view-meds" hidden>
     <div class="card">
+      <h2>બિલના ફોટામાંથી દવા ઉમેરો</h2>
+      <p class="hint" style="margin:0 0 10px">સપ્લાયરના બિલનો ફોટો પસંદ કરો. દવાનું નામ, પેક, બેચ, EXP અને MRP વંચાશે. રેટમાં MRP જ મુકાશે, ખરીદ ભાવ નહીં.</p>
+      <div class="actions" style="margin-top:0">
+        <button class="gold" id="scanBtn">📷 બિલનો ફોટો પસંદ કરો</button>
+        <input type="file" id="scanFile" accept="image/*" multiple hidden>
+      </div>
+      <p class="hint" id="scanMsg"></p>
+      <div id="scanBox" hidden>
+        <div class="scroll">
+          <table class="mtable">
+            <thead><tr><th></th><th>દવા</th><th>પેક</th><th>બેચ</th><th>EXP</th><th class="r">MRP</th><th class="r">રેટ (=MRP)</th></tr></thead>
+            <tbody id="scanRows"></tbody>
+          </table>
+        </div>
+        <div class="actions">
+          <button class="pri" id="scanAdd">પસંદ કરેલી ઉમેરો</button>
+          <button id="scanCancel">રદ કરો</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
       <h2 id="mTitle">નવી દવા ઉમેરો</h2>
       <input type="hidden" id="m_id">
       <div class="grid">
@@ -270,8 +299,11 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
         <label>બેચ<input class="fld" id="m_batch"></label>
         <label>એક્સપાયરી (7/31)<input class="fld" id="m_exp"></label>
         <label>MRP<input class="fld" id="m_mrp" inputmode="decimal"></label>
-        <label>રેટ (કિંમત)<input class="fld" id="m_rate" inputmode="decimal"></label>
+        <label>રેટ (કિંમત)<input class="fld" id="m_rate" inputmode="decimal" placeholder="ખાલી = MRP"></label>
+        <label>Content (સોલ્ટ)<input class="fld" id="m_content" placeholder="દા.ત. Paracetamol 650mg"></label>
+        <label>ઉપયોગ (ગુજરાતીમાં)<input class="fld" id="m_use" placeholder="ખાલી રાખો તો આપમેળે"></label>
       </div>
+      <p class="hint">Content ખાલી રાખશો તો જાણીતી બ્રાન્ડ (Dolo, Crocin, Azithral વગેરે) માટે આપમેળે આવશે. ઉપયોગ ખાલી રાખશો તો Content પરથી ગુજરાતીમાં આપમેળે આવશે. આ માહિતી અંદાજિત છે, તપાસીને જરૂર મુજબ સુધારો.</p>
       <div class="actions">
         <button class="pri" id="mSave">સેવ કરો</button>
         <button id="mClear">ખાલી કરો</button>
@@ -302,6 +334,16 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
       <div class="actions"><button class="pri" id="sSave">સેટિંગ સેવ કરો</button></div>
     </div>
     <div class="card">
+      <h2>બિલ ફોટો (AI) સેટિંગ</h2>
+      <p class="hint" style="margin:0 0 10px">૧) aistudio.google.com/apikey ખોલો ૨) Create API key દબાવો ૩) કી કોપી કરી નીચે પેસ્ટ કરો. ફોટો વાંચવા માટે Google ને મોકલાય છે.</p>
+      <div class="grid">
+        <label>Gemini API કી<input class="fld" id="ai_key" type="password" autocomplete="off"></label>
+        <label>Model (ખાલી રાખો તો ચાલશે)<input class="fld" id="ai_model" placeholder="gemini-2.5-flash"></label>
+      </div>
+      <p class="hint">આ કી ફક્ત આ ફોનમાં સચવાય છે, ઓનલાઈન ડેટામાં કે બીજા ફોનમાં નહીં.</p>
+      <div class="actions"><button class="pri" id="aiSave">કી સેવ કરો</button></div>
+    </div>
+    <div class="card">
       <h2>બેકઅપ</h2>
       <p class="hint" style="margin:0 0 10px">દવા, રેટ અને બિલ ઓનલાઈન (Firebase) માં સચવાય છે અને બધા ફોનમાં સરખા દેખાય છે. આ બેકઅપ ફાઈલ વધારાની સુરક્ષા માટે છે. Import કરશો તો ઓનલાઈન ડેટા પણ બદલાઈ જશે.</p>
       <div class="actions" style="margin-top:0">
@@ -319,7 +361,7 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script>
 (function(){
-  var K_DRAFT='tvasha_draft',K_BILLS='tvasha_bills',K_SHOP='tvasha_shop',K_CNT='tvasha_counter',K_MEDS='tvasha_meds',K_AUTH='tvasha_auth';
+  var K_DRAFT='tvasha_draft',K_BILLS='tvasha_bills',K_SHOP='tvasha_shop',K_CNT='tvasha_counter',K_MEDS='tvasha_meds',K_AUTH='tvasha_auth',K_AI='tvasha_ai';
   var $=function(id){return document.getElementById(id)};
   var FIELDS=['name','pack','batch','exp','mrp','qty','rate'],NUMERIC={mrp:1,qty:1,rate:1};
   var role=null,auth=null,loginRole='admin';
@@ -387,20 +429,20 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
     var v=l.filter(function(m){return !q||m.name.toLowerCase().indexOf(q)>-1});
     $('mCount').textContent='('+l.length+')';
     $('mList').innerHTML=v.length?v.map(function(m){
-      return '<tr><td><b>'+esc(m.name)+'</b></td><td>'+esc(m.pack||'')+'</td><td class="r">'+esc(m.mrp||'')+'</td><td class="r"><b>'+esc(m.rate||'')+'</b></td>'+
+      return '<tr><td><b>'+esc(m.name)+'</b>'+medSub(m)+'</td><td>'+esc(m.pack||'')+'</td><td class="r">'+esc(m.mrp||'')+'</td><td class="r"><b>'+esc(m.rate||'')+'</b></td>'+
         '<td class="r"><button data-edit="'+esc(m.id)+'">ફેરફાર</button> <button class="dng" data-rm="'+esc(m.id)+'">કાઢો</button></td></tr>';
     }).join(''):'<tr><td colspan="5" class="empty">કોઈ દવા નથી. ઉપર ફોર્મમાં દવા અને રેટ ઉમેરો.</td></tr>';
   }
-  function clearMedForm(){['m_id','m_name','m_pack','m_batch','m_exp','m_mrp','m_rate'].forEach(function(i){$(i).value=''});$('mTitle').textContent='નવી દવા ઉમેરો'}
+  function clearMedForm(){['m_id','m_name','m_pack','m_batch','m_exp','m_mrp','m_rate','m_content','m_use'].forEach(function(i){$(i).value=''});$('mTitle').textContent='નવી દવા ઉમેરો';medHints()}
   $('mClear').onclick=clearMedForm;
   $('mSave').onclick=function(){
     var name=$('m_name').value.trim();
     if(!name){toast('દવાનું નામ લખો');$('m_name').focus();return}
-    if($('m_rate').value.trim()===''){toast('રેટ (કિંમત) લખો');$('m_rate').focus();return}
+    if($('m_rate').value.trim()===''&&$('m_mrp').value.trim()===''){toast('MRP લખો (રેટ MRP જેટલો જ રહેશે)');$('m_mrp').focus();return}
     var l=meds(),id=$('m_id').value,idx=-1;
     l.forEach(function(m,i){if(m.id===id||(!id&&m.name.trim().toLowerCase()===name.toLowerCase()))idx=i});
     var m={id:idx>-1?l[idx].id:String(Date.now()),name:name,pack:$('m_pack').value.trim(),batch:$('m_batch').value.trim(),
-      exp:$('m_exp').value.trim(),mrp:$('m_mrp').value.trim(),rate:$('m_rate').value.trim()};
+      exp:$('m_exp').value.trim(),mrp:$('m_mrp').value.trim(),rate:$('m_rate').value.trim()||$('m_mrp').value.trim(),content:$('m_content').value.trim(),use:$('m_use').value.trim()};
     if(idx>-1)l[idx]=m;else l.push(m);
     if(!store(K_MEDS,l)){toast('સેવ ન થયું – સ્ટોરેજ ભરેલું છે');return}
     if(cloudOk())medRef(m.id).set(m).catch(cerr);
@@ -411,10 +453,108 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
     var ed=e.target.getAttribute('data-edit'),rm=e.target.getAttribute('data-rm'),l=meds();
     if(ed){var m=l.filter(function(x){return x.id===ed})[0];if(!m)return;
       $('m_id').value=m.id;$('m_name').value=m.name;$('m_pack').value=m.pack||'';$('m_batch').value=m.batch||'';
-      $('m_exp').value=m.exp||'';$('m_mrp').value=m.mrp||'';$('m_rate').value=m.rate||'';
+      $('m_exp').value=m.exp||'';$('m_mrp').value=m.mrp||'';$('m_rate').value=m.rate||'';$('m_content').value=m.content||'';$('m_use').value=m.use||'';medHints();
       $('mTitle').textContent='દવામાં ફેરફાર કરો';window.scrollTo({top:0,behavior:'smooth'})}
     if(rm&&confirm('આ દવા કાઢી નાખવી?')){store(K_MEDS,l.filter(function(x){return x.id!==rm}));refreshMeds();if(cloudOk())medRef(rm).delete().catch(cerr)}
   };
+
+  /* ================= Bill photo -> medicines (AI) ================= */
+  var SCAN_PROMPT='This is a photo of a supplier/purchase invoice of an Indian medical store. Extract EVERY medicine line item. Return ONLY a JSON array: [{"name":"","pack":"","batch":"","exp":"","mrp":"","qty":""}]. Rules: name exactly as printed (English); pack like 1*10 or 10TAB; exp as printed (e.g. 7/31); mrp = the printed MRP (maximum retail price) column ONLY. NEVER use the purchase rate / PTR / PTS / net rate / amount / total as mrp. Skip totals, tax, discount and non-medicine rows. Numbers as plain strings without currency symbols. Use empty string if a field is not visible.';
+  var scanItems=[];
+  function imgToB64(file){
+    return new Promise(function(res,rej){
+      var im=new Image(),u=URL.createObjectURL(file);
+      im.onload=function(){
+        var sc=Math.min(1,1800/Math.max(im.width,im.height)),c=document.createElement('canvas');
+        c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);
+        c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);
+        res(c.toDataURL('image/jpeg',0.85).split(',')[1]);
+      };
+      im.onerror=function(){rej(new Error('ફોટો ખુલ્યો નહીં'))};
+      im.src=u;
+    });
+  }
+  function callGemini(b64){
+    var ai=load(K_AI,{});if(!ai.key)return Promise.reject(new Error('nokey'));
+    var models=[ai.model||'gemini-2.5-flash','gemini-flash-latest'].filter(function(m,i,a){return a.indexOf(m)===i});
+    function attempt(i){
+      return fetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(models[i])+':generateContent?key='+encodeURIComponent(ai.key),{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({contents:[{parts:[{text:SCAN_PROMPT},{inline_data:{mime_type:'image/jpeg',data:b64}}]}],generationConfig:{temperature:0,responseMimeType:'application/json'}})
+      }).then(function(r){return r.json().catch(function(){return {}}).then(function(j){
+        if(!r.ok){
+          var msg=(j.error&&j.error.message)||('HTTP '+r.status);
+          if(i+1<models.length&&(r.status===404||/model|not found|not supported/i.test(msg)))return attempt(i+1);
+          throw new Error(msg);
+        }
+        return j;
+      })});
+    }
+    return attempt(0);
+  }
+  function cleanNum(v){return String(v==null?'':v).replace(/[^0-9.]/g,'')}
+  function parseItems(j){
+    var c=j&&j.candidates&&j.candidates[0],t=c&&c.content&&c.content.parts?c.content.parts.map(function(p){return p.text||''}).join(''):'';
+    if(!t)throw new Error('જવાબ મળ્યો નહીં. ફોટો ફરી લો.');
+    t=t.replace(/```json|```/g,'').trim();
+    var a=t.indexOf('['),z=t.lastIndexOf(']');if(a>-1&&z>a)t=t.slice(a,z+1);
+    var arr=JSON.parse(t);if(!Array.isArray(arr)&&arr&&typeof arr==='object'){var k=Object.keys(arr).filter(function(x){return Array.isArray(arr[x])})[0];arr=k?arr[k]:[]}
+    return arr.map(function(x){
+      return {ck:true,name:String(x.name||'').trim(),pack:String(x.pack||'').trim(),batch:String(x.batch||'').trim(),exp:String(x.exp||'').trim(),mrp:cleanNum(x.mrp)};
+    }).filter(function(x){return x.name});
+  }
+  function renderScan(){
+    $('scanBox').hidden=!scanItems.length;
+    $('scanRows').innerHTML=scanItems.map(function(x,i){
+      function f(k,cls){return '<td><input class="scanin '+(cls||'')+'" data-i="'+i+'" data-k="'+k+'" value="'+esc(x[k])+'"'+(k==='mrp'?' inputmode="decimal"':'')+'></td>'}
+      return '<tr><td><input type="checkbox" data-i="'+i+'" data-k="ck"'+(x.ck?' checked':'')+'></td>'+f('name')+f('pack')+f('batch')+f('exp')+f('mrp')+'<td class="r" data-rate="'+i+'"><b>'+esc(x.mrp||'')+'</b></td></tr>';
+    }).join('');
+  }
+  $('scanRows').addEventListener('input',function(e){
+    var i=e.target.getAttribute('data-i'),k=e.target.getAttribute('data-k');if(i===null)return;
+    if(k==='ck'){scanItems[+i].ck=e.target.checked;return}
+    scanItems[+i][k]=k==='mrp'?cleanNum(e.target.value):e.target.value;
+    if(k==='mrp'){var c=document.querySelector('[data-rate="'+i+'"]');if(c)c.innerHTML='<b>'+esc(scanItems[+i].mrp)+'</b>'}
+  });
+  $('scanRows').addEventListener('change',function(e){if(e.target.getAttribute('data-k')==='ck')scanItems[+e.target.getAttribute('data-i')].ck=e.target.checked});
+  $('scanBtn').onclick=function(){
+    var ai=load(K_AI,{});
+    if(!ai.key){toast('પહેલા સેટિંગમાં API કી નાખો');showTab('set');return}
+    $('scanFile').click();
+  };
+  $('scanFile').onchange=function(){
+    var files=Array.prototype.slice.call(this.files);this.value='';if(!files.length)return;
+    $('scanBtn').disabled=true;var n=0;
+    files.reduce(function(p,f,i){
+      return p.then(function(){
+        $('scanMsg').textContent='ફોટો '+(i+1)+'/'+files.length+' વંચાય છે… (૧૦-૨૦ સેકન્ડ)';
+        return imgToB64(f).then(callGemini).then(parseItems).then(function(a){scanItems=scanItems.concat(a);n+=a.length});
+      });
+    },Promise.resolve()).then(function(){
+      $('scanMsg').textContent=n?n+' દવા મળી. નીચે તપાસો, જરૂર હોય તો સુધારો, પછી "પસંદ કરેલી ઉમેરો" દબાવો.':'કોઈ દવા મળી નહીં. વધુ સ્પષ્ટ ફોટો લો.';
+      renderScan();
+    }).catch(function(e){
+      $('scanMsg').textContent='ભૂલ: '+(e.message==='nokey'?'API કી નથી':e.message);
+    }).then(function(){$('scanBtn').disabled=false});
+  };
+  $('scanCancel').onclick=function(){scanItems=[];renderScan();$('scanMsg').textContent=''};
+  $('scanAdd').onclick=function(){
+    var pick=scanItems.filter(function(x){return x.ck&&x.name.trim()});
+    if(!pick.length){toast('કોઈ દવા પસંદ નથી');return}
+    for(var q=0;q<pick.length;q++)if(!pick[q].mrp){toast('MRP લખો: '+pick[q].name);return}
+    var l=meds(),changed=[],stamp=Date.now();
+    pick.forEach(function(x,k){
+      var nm=x.name.trim().toLowerCase(),idx=-1;
+      l.forEach(function(m,i){if(m.name.trim().toLowerCase()===nm)idx=i});
+      var m=idx>-1?l[idx]:{id:String(stamp)+k,name:x.name.trim()};
+      m.pack=x.pack||m.pack||'';m.batch=x.batch||m.batch||'';m.exp=x.exp||m.exp||'';m.mrp=x.mrp;m.rate=x.mrp;
+      if(idx>-1)l[idx]=m;else l.push(m);changed.push(m);
+    });
+    if(!store(K_MEDS,l)){toast('સેવ ન થયું – સ્ટોરેજ ભરેલું છે');return}
+    if(cloudOk())runOps(changed.map(function(m){return function(b){b.set(medRef(m.id),m)}})).catch(cerr);
+    scanItems=[];renderScan();refreshMeds();$('scanMsg').textContent='';toast(pick.length+' દવા ઉમેરાઈ (રેટ = MRP)');
+  };
+  $('aiSave').onclick=function(){store(K_AI,{key:$('ai_key').value.trim(),model:$('ai_model').value.trim()});toast('કી સેવ થઈ')};
 
   /* ================= Settings & backup ================= */
   $('sSave').onclick=function(){
@@ -489,6 +629,87 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
     $('grand').textContent=g.toFixed(2);$('words').textContent=amountWords(g);
   }
 
+  /* ---------- Content & ઉપયોગ ---------- */
+  var BRANDS={dolo:'Paracetamol',crocin:'Paracetamol',calpol:'Paracetamol',combiflam:'Ibuprofen + Paracetamol',brufen:'Ibuprofen',voveran:'Diclofenac',voltaren:'Diclofenac',meftal:'Mefenamic Acid',azithral:'Azithromycin',azee:'Azithromycin',augmentin:'Amoxicillin + Clavulanic Acid',novamox:'Amoxicillin',zifi:'Cefixime',ciplox:'Ciprofloxacin',oflox:'Ofloxacin',norflox:'Norfloxacin',flagyl:'Metronidazole',metrogyl:'Metronidazole',pantocid:'Pantoprazole',pantop:'Pantoprazole',omez:'Omeprazole',rablet:'Rabeprazole',nexpro:'Esomeprazole',domstal:'Domperidone',ondem:'Ondansetron',cetzine:'Cetirizine',okacet:'Cetirizine',allegra:'Fexofenadine',montair:'Montelukast',asthalin:'Salbutamol',levolin:'Levosalbutamol',glycomet:'Metformin',amaryl:'Glimepiride',telma:'Telmisartan',amlokind:'Amlodipine',amlip:'Amlodipine',atorva:'Atorvastatin',ecosprin:'Aspirin',thyronorm:'Levothyroxine',eltroxin:'Levothyroxine',shelcal:'Calcium + Vitamin D3',becosules:'Vitamin B-Complex + Vitamin C',neurobion:'Vitamin B1 + B6 + B12',limcee:'Vitamin C',evion:'Vitamin E',zincovit:'Multivitamin + Multimineral',supradyn:'Multivitamin',electral:'ORS',eldoper:'Loperamide',digene:'Antacid (Aluminium + Magnesium Hydroxide)',gelusil:'Antacid (Aluminium + Magnesium Hydroxide)',betadine:'Povidone Iodine',candid:'Clotrimazole',zentel:'Albendazole',wysolone:'Prednisolone'};
+  var SALT_USE=[
+    [['ibuprofen','diclofenac','aceclofenac','nimesulide','mefenamic'],'દુખાવો, સોજો અને તાવ માટે','pain'],
+    [['paracetamol','acetaminophen'],'તાવ અને દુખાવા માટે','pain'],
+    [['thiocolchicoside','chlorzoxazone','tizanidine'],'સ્નાયુની જકડાઈ અને દુખાવા માટે'],
+    [['azithromycin','amoxicillin','cefixime','cefpodoxime','cefuroxime','cefadroxil','ofloxacin','ciprofloxacin','levofloxacin','norfloxacin','doxycycline','clarithromycin'],'બેક્ટેરિયાના ચેપ માટે (એન્ટિબાયોટિક – ડૉક્ટરની સલાહથી)'],
+    [['metronidazole','ornidazole','tinidazole'],'પેટના ચેપ, ઝાડા અને દાંતના ચેપ માટે'],
+    [['pantoprazole','omeprazole','rabeprazole','esomeprazole','lansoprazole'],'એસિડિટી અને પેટની બળતરા માટે','acid'],
+    [['antacid','aluminium','magnesium hydroxide','simethicone'],'એસિડિટી અને ગેસ માટે','acid'],
+    [['domperidone','ondansetron','metoclopramide'],'ઉલટી અને ઉબકા માટે'],
+    [['cetirizine','levocetirizine','fexofenadine','chlorpheniramine','loratadine'],'શરદી, છીંક, એલર્જી અને ખંજવાળ માટે'],
+    [['montelukast'],'અસ્થમા અને એલર્જિક શરદી માટે'],
+    [['salbutamol','levosalbutamol','theophylline','etofylline'],'શ્વાસ ચઢવા અને અસ્થમા માટે'],
+    [['ambroxol','bromhexine','guaifenesin','acetylcysteine'],'કફ પાતળો કરવા અને ઉધરસ માટે'],
+    [['dextromethorphan'],'સૂકી ઉધરસ માટે'],
+    [['phenylephrine','xylometazoline','oxymetazoline'],'નાક બંધ અને શરદી માટે'],
+    [['metformin','glimepiride','gliclazide','glipizide','sitagliptin','vildagliptin','teneligliptin','insulin'],'ડાયાબિટીસ (સુગર) માટે'],
+    [['amlodipine','telmisartan','losartan','olmesartan','atenolol','metoprolol','ramipril','enalapril','hydrochlorothiazide'],'બ્લડ પ્રેશર માટે'],
+    [['atorvastatin','rosuvastatin','simvastatin','fenofibrate'],'કોલેસ્ટ્રોલ ઘટાડવા માટે'],
+    [['aspirin','clopidogrel'],'લોહી પાતળું રાખવા અને હૃદય રક્ષણ માટે'],
+    [['levothyroxine','thyroxine'],'થાઇરોઇડ માટે'],
+    [['vitamin d','cholecalciferol'],'વિટામિન D ની ઉણપ અને હાડકાં માટે','bone'],
+    [['calcium'],'હાડકાં અને દાંત મજબૂત કરવા માટે','bone'],
+    [['iron','ferrous','folic'],'લોહીની ઉણપ (એનિમિયા) માટે'],
+    [['b-complex','b complex','vitamin b','methylcobalamin','cyanocobalamin','pyridoxine','thiamine'],'નબળાઈ અને ચેતાના પોષણ માટે','vit'],
+    [['multivitamin','vitamin c','ascorbic','vitamin e'],'નબળાઈ, વિટામિનની ઉણપ અને રોગપ્રતિકારક શક્તિ માટે','vit'],
+    [['zinc'],'ઝાડા અને રોગપ્રતિકારક શક્તિ માટે'],
+    [['ors','oral rehydration'],'ઝાડા-ઉલટીમાં પાણીની ઉણપ પૂરી કરવા માટે'],
+    [['loperamide'],'ઝાડા રોકવા માટે'],
+    [['lactulose','bisacodyl','isabgol','psyllium'],'કબજિયાત માટે'],
+    [['dicyclomine','hyoscine','drotaverine'],'પેટના દુખાવા અને ખેંચાણ માટે'],
+    [['clotrimazole','ketoconazole','terbinafine','fluconazole','miconazole'],'ફૂગના ચેપ અને ખંજવાળ માટે'],
+    [['povidone','betadine'],'ઘા સાફ કરવા અને ચેપ અટકાવવા માટે'],
+    [['hydrocortisone','betamethasone','mometasone','clobetasol'],'ચામડીની બળતરા અને ખંજવાળ માટે'],
+    [['prednisolone','methylprednisolone','dexamethasone'],'સોજો, એલર્જી અને બળતરા માટે (ડૉક્ટરની સલાહથી)'],
+    [['albendazole','mebendazole'],'પેટના કૃમિ માટે'],
+    [['ivermectin','permethrin'],'ખસ-ખરજવું અને કૃમિ માટે']
+  ];
+  function useFromText(t){
+    t=String(t||'').toLowerCase();if(!t)return '';
+    var tk=t.split(/[^a-z0-9]+/),seen={},out=[];
+    SALT_USE.forEach(function(e){
+      var hit=e[0].some(function(k){return /^[a-z0-9]+$/.test(k)?tk.some(function(w){return w.indexOf(k)===0}):t.indexOf(k)>-1});
+      var c=e[2]||e[1];
+      if(hit&&!seen[c]&&out.length<2){seen[c]=1;out.push(e[1])}
+    });
+    return out.join(' · ');
+  }
+  function brandContent(name){
+    var w=String(name||'').toLowerCase().split(/[^a-z0-9]+/).filter(Boolean)[0];
+    return (w&&Object.prototype.hasOwnProperty.call(BRANDS,w))?BRANDS[w]:'';
+  }
+  function contentOf(m){return m.content||brandContent(m.name)||''}
+  function useOf(m){return m.use||useFromText(m.content||brandContent(m.name))||useFromText(m.name)}
+  function medSub(m){
+    var c=contentOf(m),u=useOf(m),t=[];if(c)t.push(c);if(u)t.push(u);
+    return t.length?'<br><small class="hint" style="margin:0">'+esc(t.join(' · '))+'</small>':'';
+  }
+  function subLine(m){
+    var c=contentOf(m),u=useOf(m),t=[];
+    if(c)t.push('Content: '+esc(c)+(m.content?'':' (અંદાજિત)'));
+    if(u)t.push('ઉપયોગ: '+esc(u));
+    return t.length?'<i class="sub">'+t.join('<br>')+'</i>':'';
+  }
+  function showInfo(m){
+    var el=$('medinfo');if(!m){el.hidden=true;return}
+    var c=contentOf(m),u=useOf(m);
+    if(!c&&!u){el.hidden=true;return}
+    el.innerHTML='<b>'+esc(m.name)+'</b>'+(c?'<br>Content: '+esc(c)+(m.content?'':' (અંદાજિત)'):'')+(u?'<br>ઉપયોગ: '+esc(u):'');
+    el.hidden=false;clearTimeout(showInfo.h);showInfo.h=setTimeout(function(){el.hidden=true},9000);
+  }
+  $('medinfo').onclick=function(){this.hidden=true};
+  function medHints(){
+    var n=$('m_name').value,bc=brandContent(n),c=$('m_content').value.trim()||bc;
+    $('m_content').placeholder=bc?bc+' (આપમેળે)':'દા.ત. Paracetamol 650mg';
+    $('m_use').placeholder=useFromText(c||n)||'ઉપયોગ ગુજરાતીમાં લખો';
+  }
+  $('m_name').addEventListener('input',medHints);
+  $('m_content').addEventListener('input',medHints);
+
   /* ---------- Smart suggestions ---------- */
   var sg=$('sugg'),sgList=[],sgIdx=-1,sgInput=null;
   function norm(s){return String(s).toLowerCase().replace(/[^0-9a-z\u0A80-\u0AFF]+/g,'')}
@@ -516,15 +737,15 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
     var q=inp.value.trim();
     if(!q){hideSugg();return}
     var out=[];
-    meds().forEach(function(m){var s=score(m.name,q);if(s>-1)out.push({m:m,s:s})});
+    meds().forEach(function(m){var s=score(m.name,q);if(s<0){var s2=score(contentOf(m),q);if(s2>-1)s=4+s2;else{var s3=score(useOf(m),q);if(s3>-1)s=8+s3}}if(s>-1)out.push({m:m,s:s})});
     out.sort(function(a,b){return a.s-b.s||a.m.name.localeCompare(b.m.name)});
     sgList=out.slice(0,8).map(function(o){return o.m});sgIdx=sgList.length?0:-1;sgInput=inp;
     var ql=q.toLowerCase();
     sg.innerHTML=sgList.length?sgList.map(function(m,i){
       var n=m.name,k=n.toLowerCase().indexOf(ql);
       var h=k>-1?esc(n.slice(0,k))+'<mark>'+esc(n.slice(k,k+q.length))+'</mark>'+esc(n.slice(k+q.length)):esc(n);
-      return '<div data-i="'+i+'"'+(i===0?' class="on"':'')+'><span><b>'+h+'</b>'+(m.pack?' <small>'+esc(m.pack)+'</small>':'')+'</span><small>'+(m.mrp?'MRP '+esc(m.mrp)+' · ':'')+'રેટ '+esc(m.rate||'0')+'</small></div>';
-    }).join(''):'<div class="none">આ નામની દવા યાદીમાં નથી</div>';
+      return '<div data-i="'+i+'"'+(i===0?' class="on"':'')+'><span><b>'+h+'</b>'+(m.pack?' <small>'+esc(m.pack)+'</small>':'')+subLine(m)+'</span><small>'+(m.mrp?'MRP '+esc(m.mrp)+' · ':'')+'રેટ '+esc(m.rate||'0')+'</small></div>';
+    }).join('')+'<p class="sgnote">સામાન્ય માહિતી છે – દવા ડૉક્ટરની સલાહ મુજબ જ લેવી.</p>':'<div class="none">આ નામની દવા યાદીમાં નથી</div>';
     sg.hidden=false;placeSugg();
   }
   function fillRow(tr,m){
@@ -534,7 +755,7 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
   }
   function pickSugg(i){
     var m=sgList[i],inp=sgInput;if(!m||!inp)return;
-    var tr=inp.closest('tr');fillRow(tr,m);hideSugg();recalc();persist();
+    var tr=inp.closest('tr');fillRow(tr,m);hideSugg();recalc();persist();showInfo(m);
     var q=tr.querySelector('[data-f=qty]');q.focus();q.select();
   }
   $('rows').addEventListener('input',function(e){if(e.target.dataset.f==='name')showSugg(e.target)});
@@ -545,6 +766,7 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
     else if(e.key==='Enter'&&sgList.length){e.preventDefault();pickSugg(sgIdx)}
     else if(e.key==='Escape'){hideSugg()}
   });
+  $('rows').addEventListener('focusin',function(e){if(e.target.dataset.f==='name')showInfo(findMed(e.target.value))});
   $('rows').addEventListener('focusout',function(){setTimeout(function(){if(document.activeElement!==sgInput)hideSugg()},150)});
   $('rows').addEventListener('change',function(e){
     if(e.target.dataset.f!=='name')return;
@@ -684,7 +906,7 @@ td.act button{padding:2px 8px;background:#f6dcd8;color:var(--danger)}
     $('email').value=shop.email||'';$('gstin').value=shop.gstin||'';$('dl').value=shop.dl||'';
     var draft=load(K_DRAFT,null);
     if(draft)setBill(draft);else{setBill({invNo:nextInvNo(),date:today()});persist()}
-    renderHistory();$('s_edit').checked=!!auth.userEdit;
+    renderHistory();$('s_edit').checked=!!auth.userEdit;var ai0=load(K_AI,{});$('ai_key').value=ai0.key||'';$('ai_model').value=ai0.model||'';
     var r=sess();if(r==='admin'||r==='user')enter(r);else $('lpw').focus();
   }
   auth=load(K_AUTH,null);
